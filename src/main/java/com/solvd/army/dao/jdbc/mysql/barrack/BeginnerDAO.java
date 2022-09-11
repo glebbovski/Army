@@ -1,5 +1,5 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
-
+// git check
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.barrack.Beginner;
 
