@@ -2,17 +2,17 @@ package com.solvd.army.models.hangar;
 
 import com.solvd.army.models.abstractClasses.HangarMilitary;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
-public class InfantryFightingVehicles extends HangarMilitary {
+public class InfantryFightingVehicle extends HangarMilitary {
     private int numberOfGuns;
 
-    public InfantryFightingVehicles() {
+    public InfantryFightingVehicle() {
         super();
     }
 
-    public InfantryFightingVehicles(int id, String name, Date releaseDate, int strength,
+    public InfantryFightingVehicle(int id, String name, Date releaseDate, int strength,
                                     int hangars_id, int numberOfGuns) {
         super(id, name, releaseDate, strength, hangars_id);
         this.numberOfGuns = numberOfGuns;
@@ -31,7 +31,7 @@ public class InfantryFightingVehicles extends HangarMilitary {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        InfantryFightingVehicles that = (InfantryFightingVehicles) o;
+        InfantryFightingVehicle that = (InfantryFightingVehicle) o;
         return numberOfGuns == that.numberOfGuns;
     }
 

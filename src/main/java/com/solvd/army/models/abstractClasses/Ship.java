@@ -1,6 +1,6 @@
 package com.solvd.army.models.abstractClasses;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 public abstract class Ship {

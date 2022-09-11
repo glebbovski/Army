@@ -1,29 +1,35 @@
-package com.solvd.army.dao.jdbc.mysql.hangar;
+package com.solvd.army.dao.jdbc.mysql.jettie;
 
 import com.solvd.army.dao.IBaseDAO;
-import com.solvd.army.models.hangar.Helicopter;
+import com.solvd.army.models.jettie.Boat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HelicopterDAO implements IBaseDAO<Helicopter> {
-    private static final String GET = "SELECT * FROM army.helicopters WHERE id=?";
-    private static final String UPDATE = "UPDATE army.helicopters SET army.helicopters.name=?, " +
-            "army.helicopters.releaseDate=?, " +
-            "army.helicopters.numberOfFlights=?, army.helicopters.strength=? WHERE army.helicopters.id=?";
-    private static final String INSERT = "INSERT INTO army.helicopters (army.helicopters.name, " +
-            "army.helicopters.releaseDate, " +
-            "army.helicopters.numberOfFlights, army.helicopters.strength, army.helicopters.Hangars_id)\n" +
+public class BoatDAO implements IBaseDAO<Boat> {
+    private static final String GET = "SELECT * FROM army.boats WHERE id=?";
+    private static final String UPDATE = "UPDATE army.boats SET " +
+            "army.boats.name=?, " +
+            "army.boats.releaseDate=?, " +
+            "army.boats.numberOfGuns=?, " +
+            "army.boats.strength=? " +
+            "WHERE army.boats.id=?";
+    private static final String INSERT = "INSERT INTO army.boats " +
+            "(army.boats.name, " +
+            "army.boats.releaseDate, " +
+            "army.boats.numberOfGuns, " +
+            "army.boats.strength, " +
+            "army.boats.Jetties_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
-    private static final String DELETE = "DELETE FROM army.helicopters WHERE id=?";
+    private static final String DELETE = "DELETE FROM army.boats WHERE id=?";
 
-    public HelicopterDAO() {
+    public BoatDAO() {
     }
 
     @Override
-    public void create(Helicopter object) {
+    public void create(Boat object) {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -31,9 +37,9 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
             ps = connection.prepareStatement(INSERT);
             ps.setString(1, object.getName());
             ps.setDate(2, object.getReleaseDate());
-            ps.setInt(3, object.getNumberOfFlights());
+            ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getStrength());
-            ps.setLong(5, object.getHangars_id());
+            ps.setLong(5, object.getJetties_id());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -45,7 +51,7 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
     }
 
     @Override
-    public Helicopter getById(long id) {
+    public Boat getById(long id) {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -56,14 +62,14 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
-                Helicopter helicopter = new Helicopter();
-                helicopter.setId(rs.getInt("id"));
-                helicopter.setName(rs.getString("name"));
-                helicopter.setReleaseDate(rs.getDate("releaseDate"));
-                helicopter.setNumberOfFlights(rs.getInt("numberOfFlights"));
-                helicopter.setStrength(rs.getInt("strength"));
-                helicopter.setHangars_id(rs.getInt("Hangars_id"));
-                return helicopter;
+                Boat boats = new Boat();
+                boats.setId(rs.getInt("id"));
+                boats.setName(rs.getString("name"));
+                boats.setReleaseDate(rs.getDate("releaseDate"));
+                boats.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                boats.setStrength(rs.getInt("strength"));
+                boats.setJetties_id(rs.getInt("Jetties_id"));
+                return boats;
             }
 
         } catch (SQLException e) {
@@ -80,15 +86,15 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            Helicopter helicopter = getById(id);
+            Boat boats = getById(id);
             connection = getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setString(1, helicopter.getName());
-            ps.setDate(2, helicopter.getReleaseDate());
-            ps.setInt(3, helicopter.getNumberOfFlights());
-            ps.setInt(4, helicopter.getStrength());
-            ps.setInt(5, helicopter.getId());
+            ps.setString(1, boats.getName());
+            ps.setDate(2, boats.getReleaseDate());
+            ps.setInt(3, boats.getNumberOfGuns());
+            ps.setInt(4, boats.getStrength());
+            ps.setInt(5, boats.getId());
             ps.executeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public interface IBaseDAO<T> {
     String DRIVER_NAME = "com.mysql.jdbc.Driver";
-    String DB_URL = "jdbc:mysql://localhost/ca";
+    String DB_URL = "jdbc:mysql://hostname:3306/army";
     String ID = "root";
     String PASS = "";
 
@@ -16,7 +16,7 @@ public interface IBaseDAO<T> {
     void update (long id);
     void remove (long id);
 
-    default Connection getConnection() {
+    default Connection getConnection()  {
         try {
             Class.forName(DRIVER_NAME);
             return DriverManager.getConnection(DB_URL, ID, PASS);

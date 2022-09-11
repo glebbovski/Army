@@ -1,29 +1,29 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.dao.IBaseDAO;
-import com.solvd.army.models.hangar.Helicopter;
+import com.solvd.army.models.hangar.UAV;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HelicopterDAO implements IBaseDAO<Helicopter> {
-    private static final String GET = "SELECT * FROM army.helicopters WHERE id=?";
-    private static final String UPDATE = "UPDATE army.helicopters SET army.helicopters.name=?, " +
-            "army.helicopters.releaseDate=?, " +
-            "army.helicopters.numberOfFlights=?, army.helicopters.strength=? WHERE army.helicopters.id=?";
-    private static final String INSERT = "INSERT INTO army.helicopters (army.helicopters.name, " +
-            "army.helicopters.releaseDate, " +
-            "army.helicopters.numberOfFlights, army.helicopters.strength, army.helicopters.Hangars_id)\n" +
+public class UAVDAO implements IBaseDAO<UAV> {
+    private static final String GET = "SELECT * FROM army.uavs WHERE id=?";
+    private static final String UPDATE = "UPDATE army.uavs SET army.uavs.name=?, " +
+            "army.uavs.releaseDate=?, " +
+            "army.uavs.numberOfBombs=?, army.uavs.strength=? WHERE army.uavs.id=?";
+    private static final String INSERT = "INSERT INTO army.uavs (army.uavs.name, " +
+            "army.uavs.releaseDate, " +
+            "army.uavs.numberOfBombs, army.uavs.strength, army.uavs.Hangars_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
-    private static final String DELETE = "DELETE FROM army.helicopters WHERE id=?";
+    private static final String DELETE = "DELETE FROM army.uavs WHERE id=?";
 
-    public HelicopterDAO() {
+    public UAVDAO() {
     }
 
     @Override
-    public void create(Helicopter object) {
+    public void create(UAV object) {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -31,7 +31,7 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
             ps = connection.prepareStatement(INSERT);
             ps.setString(1, object.getName());
             ps.setDate(2, object.getReleaseDate());
-            ps.setInt(3, object.getNumberOfFlights());
+            ps.setInt(3, object.getNumberOfBombs());
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getHangars_id());
             ps.executeQuery();
@@ -45,7 +45,7 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
     }
 
     @Override
-    public Helicopter getById(long id) {
+    public UAV getById(long id) {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -56,14 +56,14 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
-                Helicopter helicopter = new Helicopter();
-                helicopter.setId(rs.getInt("id"));
-                helicopter.setName(rs.getString("name"));
-                helicopter.setReleaseDate(rs.getDate("releaseDate"));
-                helicopter.setNumberOfFlights(rs.getInt("numberOfFlights"));
-                helicopter.setStrength(rs.getInt("strength"));
-                helicopter.setHangars_id(rs.getInt("Hangars_id"));
-                return helicopter;
+                UAV uavs = new UAV();
+                uavs.setId(rs.getInt("id"));
+                uavs.setName(rs.getString("name"));
+                uavs.setReleaseDate(rs.getDate("releaseDate"));
+                uavs.setNumberOfBombs(rs.getInt("numberOfBombs"));
+                uavs.setStrength(rs.getInt("strength"));
+                uavs.setHangars_id(rs.getInt("Hangars_id"));
+                return uavs;
             }
 
         } catch (SQLException e) {
@@ -80,15 +80,15 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            Helicopter helicopter = getById(id);
+            UAV uav = getById(id);
             connection = getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setString(1, helicopter.getName());
-            ps.setDate(2, helicopter.getReleaseDate());
-            ps.setInt(3, helicopter.getNumberOfFlights());
-            ps.setInt(4, helicopter.getStrength());
-            ps.setInt(5, helicopter.getId());
+            ps.setString(1, uav.getName());
+            ps.setDate(2, uav.getReleaseDate());
+            ps.setInt(3, uav.getNumberOfBombs());
+            ps.setInt(4, uav.getStrength());
+            ps.setInt(5, uav.getId());
             ps.executeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -2,7 +2,7 @@ package com.solvd.army.models.hangar;
 
 import com.solvd.army.models.abstractClasses.HangarMilitary;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 public class Aircraft extends HangarMilitary {
