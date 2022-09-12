@@ -1,5 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
 
+import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.barrack.Barrack;
 
@@ -27,7 +28,7 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setInt(1, object.getNumberOfBeds());
             ps.setInt(2, object.getNumberOfFloors());
@@ -47,7 +48,7 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET);
             ps.setLong(1, id);
 
@@ -77,7 +78,7 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         PreparedStatement ps = null;
         try {
             Barrack barrack = getById(id);
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
             ps.setInt(1, barrack.getNumberOfBeds());
@@ -97,7 +98,7 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
             ps.executeQuery();

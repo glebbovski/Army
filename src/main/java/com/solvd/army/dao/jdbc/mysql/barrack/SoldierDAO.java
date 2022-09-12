@@ -1,11 +1,8 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
 
+import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.barrack.Soldier;
-import static com.solvd.army.dao.IBaseDAO.DB_URL;
-import static com.solvd.army.dao.IBaseDAO.DRIVER_NAME;
-import static com.solvd.army.dao.IBaseDAO.ID;
-import static com.solvd.army.dao.IBaseDAO.PASS;
 
 
 import java.sql.*;
@@ -28,7 +25,7 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setString(1, soldier.getName());
             ps.setString(2, soldier.getSurname());
@@ -49,7 +46,7 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET);
             ps.setLong(1, id);
 
@@ -80,7 +77,7 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         PreparedStatement ps = null;
         try {
             Soldier soldier = getById(id);
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
             ps.setString(1, soldier.getName());
@@ -102,7 +99,7 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
             ps.executeQuery();

@@ -1,5 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
+import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.hangar.Tank;
 
@@ -32,7 +33,7 @@ public class TankDAO implements IBaseDAO<Tank> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setString(1, object.getName());
             ps.setDate(2, object.getReleaseDate());
@@ -55,7 +56,7 @@ public class TankDAO implements IBaseDAO<Tank> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET);
             ps.setLong(1, id);
 
@@ -88,7 +89,7 @@ public class TankDAO implements IBaseDAO<Tank> {
         PreparedStatement ps = null;
         try {
             Tank tank = getById(id);
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
             ps.setString(1, tank.getName());
@@ -111,7 +112,7 @@ public class TankDAO implements IBaseDAO<Tank> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
             ps.executeQuery();

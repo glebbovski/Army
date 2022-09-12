@@ -1,5 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
 // git check
+import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.barrack.Beginner;
 
@@ -25,7 +26,7 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setString(1, object.getName());
             ps.setString(2, object.getSurname());
@@ -47,7 +48,7 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET);
             ps.setLong(1, id);
 
@@ -79,7 +80,7 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         PreparedStatement ps = null;
         try {
             Beginner beginner = getById(id);
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
             ps.setString(1, beginner.getName());
@@ -101,7 +102,7 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
             ps.executeQuery();

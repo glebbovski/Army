@@ -6,24 +6,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public interface IBaseDAO<T> {
-    String DRIVER_NAME = "com.mysql.jdbc.Driver";
-    String DB_URL = "jdbc:mysql://hostname:3306/army";
-    String ID = "root";
-    String PASS = "";
+//    String DRIVER_NAME = "com.mysql.jdbc.Driver";
+//    String DB_URL = "jdbc:mysql://hostname:3306/army";
+//    String ID = "root";
+//    String PASS = "";
 
     void create(T object);
     T getById (long id);
     void update (long id);
     void remove (long id);
 
-    default Connection getConnection()  {
-        try {
-            Class.forName(DRIVER_NAME);
-            return DriverManager.getConnection(DB_URL, ID, PASS);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    default Connection getConnection()  {
+//        try {
+//            Class.forName(DRIVER_NAME);
+//            return DriverManager.getConnection(DB_URL, ID, PASS);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
     default void close(Connection con) {
         if (con != null) {
             try {

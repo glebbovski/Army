@@ -1,5 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
+import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.hangar.UAV;
 
@@ -27,7 +28,7 @@ public class UAVDAO implements IBaseDAO<UAV> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setString(1, object.getName());
             ps.setDate(2, object.getReleaseDate());
@@ -49,7 +50,7 @@ public class UAVDAO implements IBaseDAO<UAV> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET);
             ps.setLong(1, id);
 
@@ -81,7 +82,7 @@ public class UAVDAO implements IBaseDAO<UAV> {
         PreparedStatement ps = null;
         try {
             UAV uav = getById(id);
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
             ps.setString(1, uav.getName());
@@ -103,7 +104,7 @@ public class UAVDAO implements IBaseDAO<UAV> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
             ps.executeQuery();

@@ -1,5 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
+import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.hangar.Hangar;
 
@@ -26,7 +27,7 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setInt(1, object.getNumberOfMilitaryCraft());
             ps.setLong(2, object.getArmy_id());
@@ -45,7 +46,7 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET);
             ps.setLong(1, id);
 
@@ -74,7 +75,7 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         PreparedStatement ps = null;
         try {
             Hangar hangar = getById(id);
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
             ps.setInt(1, hangar.getNumberOfMilitaryCraft());
@@ -93,7 +94,7 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
             ps.executeQuery();

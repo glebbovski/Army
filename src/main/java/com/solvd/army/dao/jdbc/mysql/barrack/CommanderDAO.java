@@ -1,5 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
 
+import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.barrack.Commander;
 
@@ -25,7 +26,7 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setString(1, commander.getName());
             ps.setString(2, commander.getSurname());
@@ -46,7 +47,7 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET);
             ps.setLong(1, id);
 
@@ -77,7 +78,7 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         PreparedStatement ps = null;
         try {
             Commander commander = getById(id);
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
             ps.setString(1, commander.getName());
@@ -99,7 +100,7 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            connection = getConnection();
+            connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
             ps.executeQuery();
