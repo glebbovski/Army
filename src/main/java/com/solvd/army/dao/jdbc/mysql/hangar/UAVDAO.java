@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UAVDAO implements IBaseDAO<UAV> {
     private static final String GET = "SELECT * FROM army.uavs WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.uavs";
     private static final String UPDATE = "UPDATE army.uavs SET army.uavs.name=?, " +
             "army.uavs.releaseDate=?, " +
             "army.uavs.numberOfBombs=?, army.uavs.strength=? WHERE army.uavs.id=?";
@@ -40,8 +43,8 @@ public class UAVDAO implements IBaseDAO<UAV> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -70,10 +73,41 @@ public class UAVDAO implements IBaseDAO<UAV> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<UAV> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<UAV> uavList = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                UAV uavs = new UAV();
+                uavs.setId(rs.getInt("id"));
+                uavs.setName(rs.getString("name"));
+                uavs.setReleaseDate(rs.getDate("releaseDate"));
+                uavs.setNumberOfBombs(rs.getInt("numberOfBombs"));
+                uavs.setStrength(rs.getInt("strength"));
+                uavs.setHangars_id(rs.getInt("Hangars_id"));
+                uavList.add(uavs);
+            }
+            
+            return uavList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -94,8 +128,8 @@ public class UAVDAO implements IBaseDAO<UAV> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -111,8 +145,8 @@ public class UAVDAO implements IBaseDAO<UAV> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

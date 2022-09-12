@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubmarineDAO implements IBaseDAO<Submarine> {
     private static final String GET = "SELECT * FROM army.submarines WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.submarines";
     private static final String UPDATE = "UPDATE army.submarines SET " +
             "army.submarines.name=?, " +
             "army.submarines.releaseDate=?, " +
@@ -49,8 +52,8 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -80,10 +83,42 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Submarine> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Submarine> submarineList = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Submarine submarine = new Submarine();
+                submarine.setId(rs.getInt("id"));
+                submarine.setName(rs.getString("name"));
+                submarine.setReleaseDate(rs.getDate("releaseDate"));
+                submarine.setNumberOfBombs(rs.getInt("numberOfBombs"));
+                submarine.setNumberOfEchoSounders(rs.getInt("numberOfEchoSounders"));
+                submarine.setStrength(rs.getInt("strength"));
+                submarine.setJetties_id(rs.getInt("Jetties_id"));
+                submarineList.add(submarine);
+            }
+            return submarineList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -105,8 +140,8 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -122,8 +157,8 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

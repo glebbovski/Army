@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class ConnectionUtil {
@@ -26,5 +27,24 @@ public class ConnectionUtil {
             System.out.println(e.getMessage());
         }
         return connection;
+    }
+
+    public static void close(Connection con) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public static void close(Statement stmt) {
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

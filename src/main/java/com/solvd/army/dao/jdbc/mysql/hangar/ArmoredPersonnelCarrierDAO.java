@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarrier> {
     private static final String GET = "SELECT * FROM army.armoredpersonnelcarriers WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.armoredpersonnelcarriers";
     private static final String UPDATE = "UPDATE army.armoredpersonnelcarriers SET " +
             "army.armoredpersonnelcarriers.name=?, " +
             "army.armoredpersonnelcarriers.releaseDate=?, " +
@@ -44,8 +47,8 @@ public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarr
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -74,10 +77,41 @@ public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarr
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<ArmoredPersonnelCarrier> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<ArmoredPersonnelCarrier> armoredPersonnelCarriersList = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ArmoredPersonnelCarrier armoredPersonnelCarriers = new ArmoredPersonnelCarrier();
+                armoredPersonnelCarriers.setId(rs.getInt("id"));
+                armoredPersonnelCarriers.setName(rs.getString("name"));
+                armoredPersonnelCarriers.setReleaseDate(rs.getDate("releaseDate"));
+                armoredPersonnelCarriers.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                armoredPersonnelCarriers.setStrength(rs.getInt("strength"));
+                armoredPersonnelCarriers.setHangars_id(rs.getInt("Hangars_id"));
+                armoredPersonnelCarriersList.add(armoredPersonnelCarriers);
+            }
+            return armoredPersonnelCarriersList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -98,8 +132,8 @@ public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarr
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -115,8 +149,8 @@ public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarr
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

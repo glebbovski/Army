@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JettieDAO implements IBaseDAO<Jettie> {
     private static final String GET = "SELECT * FROM army.jetties WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.jetties";
     private static final String UPDATE = "UPDATE army.jetties SET army.jetties.numberOfShips=? " +
             "WHERE army.jetties.id=?";
     private static final String INSERT = "INSERT INTO army.jetties " +
@@ -36,8 +39,8 @@ public class JettieDAO implements IBaseDAO<Jettie> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -63,10 +66,37 @@ public class JettieDAO implements IBaseDAO<Jettie> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Jettie> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Jettie> jetties = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Jettie jettie = new Jettie();
+                jettie.setId(rs.getInt("id"));
+                jettie.setNumberOfShips(rs.getInt("numberOfShips"));
+                jettie.setArmy_id(rs.getInt("Army_id"));
+                jetties.add(jettie);
+            }
+            return jetties;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -84,8 +114,8 @@ public class JettieDAO implements IBaseDAO<Jettie> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -101,8 +131,8 @@ public class JettieDAO implements IBaseDAO<Jettie> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

@@ -6,9 +6,12 @@ import com.solvd.army.models.barrack.Soldier;
 
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SoldierDAO implements IBaseDAO<Soldier> {
     private static final String GET = "SELECT * FROM army.soldiers WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.soldiers";
     private static final String UPDATE = "UPDATE army.soldiers SET army.soldiers.name=?, army.soldiers.surname=?, " +
             "army.soldiers.rank=? WHERE army.soldiers.id=?";
     private static final String INSERT = "INSERT INTO army.soldiers (army.soldiers.name, army.soldiers.surname, " +
@@ -36,8 +39,8 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -65,10 +68,40 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Soldier> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET);
+            List<Soldier> soldiers = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Soldier soldier = new Soldier();
+                soldier.setId(rs.getInt("id"));
+                soldier.setName(rs.getString("name"));
+                soldier.setSurname(rs.getString("surname"));
+                soldier.setRank(rs.getString("rank"));
+                soldier.setBarracks_id(rs.getInt("Barracks_id"));
+                soldiers.add(soldier);
+            }
+            return soldiers;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -89,8 +122,8 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -106,8 +139,8 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 

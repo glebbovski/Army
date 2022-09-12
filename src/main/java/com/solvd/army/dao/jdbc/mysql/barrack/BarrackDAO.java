@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BarrackDAO implements IBaseDAO<Barrack> {
     private static final String GET = "SELECT * FROM army.barracks WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.barracks";
     private static final String UPDATE = "UPDATE army.barracks SET army.barracks.numberOfBeds=?, " +
             "army.barracks.numberOfFloors=? " +
             "WHERE army.barracks.id=?";
@@ -38,8 +41,8 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -66,10 +69,40 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Barrack> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+
+            ResultSet rs = ps.executeQuery();
+            List<Barrack> barracks = new ArrayList<>();
+
+            while(rs.next()) {
+                Barrack barrack = new Barrack();
+                barrack.setId(rs.getInt("id"));
+                barrack.setNumberOfBeds(rs.getInt("numberOfBeds"));
+                barrack.setNumberOfFloors(rs.getInt("numberOfFloors"));
+                barrack.setArmy_id(rs.getInt("Army_id"));
+                barracks.add(barrack);
+            }
+            return barracks;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+
     }
 
     @Override
@@ -88,8 +121,8 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -105,8 +138,8 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommanderDAO implements IBaseDAO<Commander> {
     private static final String GET = "SELECT * FROM army.commanders WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.commanders";
     private static final String UPDATE = "UPDATE army.commanders SET army.commanders.name=?, army.commanders.surname=?, " +
             "army.commanders.rank=? WHERE army.commanders.id=?";
     private static final String INSERT = "INSERT INTO army.commanders (army.commanders.name, army.commanders.surname, " +
@@ -37,8 +40,8 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -66,10 +69,39 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Commander> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Commander> commanders = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Commander commander = new Commander();
+                commander.setId(rs.getInt("id"));
+                commander.setName(rs.getString("name"));
+                commander.setSurname(rs.getString("surname"));
+                commander.setRank(rs.getString("rank"));
+                commander.setBarracks_id(rs.getInt("Barracks_id"));
+                commanders.add(commander);
+            }
+            return commanders;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -90,8 +122,8 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -107,8 +139,8 @@ public class CommanderDAO implements IBaseDAO<Commander> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

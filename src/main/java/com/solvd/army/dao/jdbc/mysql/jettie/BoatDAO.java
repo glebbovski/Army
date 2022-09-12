@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoatDAO implements IBaseDAO<Boat> {
     private static final String GET = "SELECT * FROM army.boats WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.boats";
     private static final String UPDATE = "UPDATE army.boats SET " +
             "army.boats.name=?, " +
             "army.boats.releaseDate=?, " +
@@ -46,8 +49,8 @@ public class BoatDAO implements IBaseDAO<Boat> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -76,10 +79,41 @@ public class BoatDAO implements IBaseDAO<Boat> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Boat> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Boat> boatsList = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Boat boats = new Boat();
+                boats.setId(rs.getInt("id"));
+                boats.setName(rs.getString("name"));
+                boats.setReleaseDate(rs.getDate("releaseDate"));
+                boats.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                boats.setStrength(rs.getInt("strength"));
+                boats.setJetties_id(rs.getInt("Jetties_id"));
+                boatsList.add(boats);
+            }
+            return boatsList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -100,8 +134,8 @@ public class BoatDAO implements IBaseDAO<Boat> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -117,8 +151,8 @@ public class BoatDAO implements IBaseDAO<Boat> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

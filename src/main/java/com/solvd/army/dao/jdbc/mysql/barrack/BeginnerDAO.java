@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BeginnerDAO implements IBaseDAO<Beginner> {
     private static final String GET = "SELECT * FROM army.beginners WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.beginners";
     private static final String UPDATE = "UPDATE army.beginners SET army.beginners.name=?, army.beginners.surname=?, " +
             "army.beginners.beginDate=?, army.beginners.endDate=? WHERE army.beginners.id=?";
     private static final String INSERT = "INSERT INTO army.beginners (army.beginners.name, army.beginners.surname, " +
@@ -38,8 +41,8 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -68,10 +71,40 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Beginner> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Beginner> beginners = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Beginner beginner = new Beginner();
+                beginner.setId(rs.getInt("id"));
+                beginner.setName(rs.getString("name"));
+                beginner.setSurname(rs.getString("surname"));
+                beginner.setBeginDate(rs.getDate("beginDate"));
+                beginner.setEndDate(rs.getDate("endDate"));
+                beginner.setBarracks_id(rs.getInt("Barracks_id"));
+                beginners.add(beginner);
+            }
+            return beginners;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -92,8 +125,8 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -109,8 +142,8 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

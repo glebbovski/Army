@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WarshipDAO implements IBaseDAO<Warship> {
     private static final String GET = "SELECT * FROM army.warships WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.warships";
     private static final String UPDATE = "UPDATE army.warships SET " +
             "army.warships.name=?, " +
             "army.warships.releaseDate=?, " +
@@ -49,8 +52,8 @@ public class WarshipDAO implements IBaseDAO<Warship> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -80,10 +83,42 @@ public class WarshipDAO implements IBaseDAO<Warship> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Warship> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Warship> warships = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Warship warship = new Warship();
+                warship.setId(rs.getInt("id"));
+                warship.setName(rs.getString("name"));
+                warship.setReleaseDate(rs.getDate("releaseDate"));
+                warship.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                warship.setNumberOfBombs(rs.getInt("numberOfBombs"));
+                warship.setStrength(rs.getInt("strength"));
+                warship.setJetties_id(rs.getInt("Jetties_id"));
+                warships.add(warship);
+            }
+            return warships;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -105,8 +140,8 @@ public class WarshipDAO implements IBaseDAO<Warship> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -122,8 +157,8 @@ public class WarshipDAO implements IBaseDAO<Warship> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

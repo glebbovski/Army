@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TankDAO implements IBaseDAO<Tank> {
     private static final String GET = "SELECT * FROM army.tanks WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.tanks";
     private static final String UPDATE = "UPDATE army.tanks SET " +
             "army.tanks.name=?, " +
             "army.tanks.releaseDate=?, " +
@@ -46,8 +49,8 @@ public class TankDAO implements IBaseDAO<Tank> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -77,10 +80,42 @@ public class TankDAO implements IBaseDAO<Tank> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Tank> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Tank> tanks = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Tank tank = new Tank();
+                tank.setId(rs.getInt("id"));
+                tank.setName(rs.getString("name"));
+                tank.setReleaseDate(rs.getDate("releaseDate"));
+                tank.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                tank.setCentimetersOfArmor(rs.getInt("centimetersOfArmor"));
+                tank.setStrength(rs.getInt("strength"));
+                tank.setHangars_id(rs.getInt("Hangars_id"));
+                tanks.add(tank);
+            }
+            return tanks;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -102,8 +137,8 @@ public class TankDAO implements IBaseDAO<Tank> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -119,8 +154,8 @@ public class TankDAO implements IBaseDAO<Tank> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

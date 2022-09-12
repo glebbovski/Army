@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AircraftDAO implements IBaseDAO<Aircraft> {
     private static final String GET = "SELECT * FROM army.aircrafts WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.aircrafts";
     private static final String UPDATE = "UPDATE army.aircrafts SET army.aircrafts.name=?, " +
             "army.aircrafts.releaseDate=?, " +
             "army.aircrafts.numberOfFlights=?, army.aircrafts.strength=? WHERE army.aircrafts.id=?";
@@ -40,8 +43,8 @@ public class AircraftDAO implements IBaseDAO<Aircraft> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -70,10 +73,41 @@ public class AircraftDAO implements IBaseDAO<Aircraft> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Aircraft> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Aircraft> aircrafts = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Aircraft aircraft = new Aircraft();
+                aircraft.setId(rs.getInt("id"));
+                aircraft.setName(rs.getString("name"));
+                aircraft.setReleaseDate(rs.getDate("releaseDate"));
+                aircraft.setNumberOfFlights(rs.getInt("numberOfFlights"));
+                aircraft.setStrength(rs.getInt("strength"));
+                aircraft.setHangars_id(rs.getInt("Hangars_id"));
+                aircrafts.add(aircraft);
+            }
+            return aircrafts;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -94,8 +128,8 @@ public class AircraftDAO implements IBaseDAO<Aircraft> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -111,8 +145,8 @@ public class AircraftDAO implements IBaseDAO<Aircraft> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

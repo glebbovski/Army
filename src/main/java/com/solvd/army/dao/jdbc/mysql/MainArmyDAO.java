@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainArmyDAO implements IBaseDAO<MainArmy> {
     private static final String GET = "SELECT * FROM army.mainArmy WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.mainArmy";
     private static final String UPDATE = "UPDATE army.mainArmy SET " +
             "army.mainArmy.name=?, " +
             "army.mainArmy.rating=? " +
@@ -38,8 +41,8 @@ public class MainArmyDAO implements IBaseDAO<MainArmy> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -65,10 +68,39 @@ public class MainArmyDAO implements IBaseDAO<MainArmy> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<MainArmy> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<MainArmy> mainArmies = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                MainArmy mainArmy = new MainArmy();
+                mainArmy.setId(rs.getInt("id"));
+                mainArmy.setName(rs.getString("name"));
+                mainArmy.setRating(rs.getInt("rating"));
+                mainArmies.add(mainArmy);
+            }
+            
+            return mainArmies;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -87,8 +119,8 @@ public class MainArmyDAO implements IBaseDAO<MainArmy> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -104,8 +136,8 @@ public class MainArmyDAO implements IBaseDAO<MainArmy> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

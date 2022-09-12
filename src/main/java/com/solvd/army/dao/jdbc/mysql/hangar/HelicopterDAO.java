@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelicopterDAO implements IBaseDAO<Helicopter> {
     private static final String GET = "SELECT * FROM army.helicopters WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.helicopters";
     private static final String UPDATE = "UPDATE army.helicopters SET army.helicopters.name=?, " +
             "army.helicopters.releaseDate=?, " +
             "army.helicopters.numberOfFlights=?, army.helicopters.strength=? WHERE army.helicopters.id=?";
@@ -40,8 +43,8 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -70,10 +73,41 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Helicopter> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Helicopter> helicopters = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Helicopter helicopter = new Helicopter();
+                helicopter.setId(rs.getInt("id"));
+                helicopter.setName(rs.getString("name"));
+                helicopter.setReleaseDate(rs.getDate("releaseDate"));
+                helicopter.setNumberOfFlights(rs.getInt("numberOfFlights"));
+                helicopter.setStrength(rs.getInt("strength"));
+                helicopter.setHangars_id(rs.getInt("Hangars_id"));
+                helicopters.add(helicopter);
+            }
+            return helicopters;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -94,8 +128,8 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -111,8 +145,8 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }

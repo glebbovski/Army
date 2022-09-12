@@ -8,9 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HangarDAO implements IBaseDAO<Hangar> {
     private static final String GET = "SELECT * FROM army.hangars WHERE id=?";
+    private static final String GET_ALL = "SELECT * FROM army.hangars";
     private static final String UPDATE = "UPDATE army.hangars SET army.hangars.numberOfMilitaryCraft=? " +
             "WHERE army.hangars.id=?";
     private static final String INSERT = "INSERT INTO army.hangars " +
@@ -36,8 +39,8 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -63,10 +66,38 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
         return null;
+    }
+
+    @Override
+    public List<Hangar> getAllRows() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            List<Hangar> hangars = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Hangar hangar = new Hangar();
+                hangar.setId(rs.getInt("id"));
+                hangar.setNumberOfMilitaryCraft(rs.getInt("numberOfMilitaryCraft"));
+                hangar.setArmy_id(rs.getInt("Army_id"));
+                hangars.add(hangar);
+            }
+            return hangars;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override
@@ -84,8 +115,8 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 
@@ -101,8 +132,8 @@ public class HangarDAO implements IBaseDAO<Hangar> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(ps);
-            close(connection);
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
         }
     }
 }
