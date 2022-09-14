@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.jettie;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.ISubmarineDAO;
 import com.solvd.army.models.jettie.Submarine;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubmarineDAO implements IBaseDAO<Submarine> {
+public class SubmarineDAO implements ISubmarineDAO {
     private static final String GET = "SELECT * FROM army.submarines WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.submarines";
     private static final String UPDATE = "UPDATE army.submarines SET " +
@@ -46,7 +47,7 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
             ps.setInt(3, object.getNumberOfBombs());
             ps.setInt(4, object.getNumberOfEchoSounders());
             ps.setInt(5, object.getStrength());
-            ps.setLong(6, object.getJetties_id());
+            ps.setLong(6, object.getJettiesId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -68,7 +69,7 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Submarine submarine = new Submarine();
                 submarine.setId(rs.getInt("id"));
                 submarine.setName(rs.getString("name"));
@@ -76,7 +77,7 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
                 submarine.setNumberOfBombs(rs.getInt("numberOfBombs"));
                 submarine.setNumberOfEchoSounders(rs.getInt("numberOfEchoSounders"));
                 submarine.setStrength(rs.getInt("strength"));
-                submarine.setJetties_id(rs.getInt("Jetties_id"));
+                submarine.setJettiesId(rs.getInt("Jetties_id"));
                 return submarine;
             }
 
@@ -108,7 +109,7 @@ public class SubmarineDAO implements IBaseDAO<Submarine> {
                 submarine.setNumberOfBombs(rs.getInt("numberOfBombs"));
                 submarine.setNumberOfEchoSounders(rs.getInt("numberOfEchoSounders"));
                 submarine.setStrength(rs.getInt("strength"));
-                submarine.setJetties_id(rs.getInt("Jetties_id"));
+                submarine.setJettiesId(rs.getInt("Jetties_id"));
                 submarineList.add(submarine);
             }
             return submarineList;

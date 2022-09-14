@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.barrack;
 // git check
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IBeginnerDAO;
 import com.solvd.army.models.barrack.Beginner;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeginnerDAO implements IBaseDAO<Beginner> {
+public class BeginnerDAO implements IBeginnerDAO {
     private static final String GET = "SELECT * FROM army.beginners WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.beginners";
     private static final String UPDATE = "UPDATE army.beginners SET army.beginners.name=?, army.beginners.surname=?, " +
@@ -35,7 +36,7 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
             ps.setString(2, object.getSurname());
             ps.setDate(3, object.getBeginDate());
             ps.setDate(4, object.getEndDate());
-            ps.setLong(5, object.getBarracks_id());
+            ps.setLong(5, object.getBarracksId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -57,14 +58,14 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Beginner beginner = new Beginner();
                 beginner.setId(rs.getInt("id"));
                 beginner.setName(rs.getString("name"));
                 beginner.setSurname(rs.getString("surname"));
                 beginner.setBeginDate(rs.getDate("beginDate"));
                 beginner.setEndDate(rs.getDate("endDate"));
-                beginner.setBarracks_id(rs.getInt("Barracks_id"));
+                beginner.setBarracksId(rs.getInt("Barracks_id"));
                 return beginner;
             }
 
@@ -94,7 +95,7 @@ public class BeginnerDAO implements IBaseDAO<Beginner> {
                 beginner.setSurname(rs.getString("surname"));
                 beginner.setBeginDate(rs.getDate("beginDate"));
                 beginner.setEndDate(rs.getDate("endDate"));
-                beginner.setBarracks_id(rs.getInt("Barracks_id"));
+                beginner.setBarracksId(rs.getInt("Barracks_id"));
                 beginners.add(beginner);
             }
             return beginners;

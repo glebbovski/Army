@@ -1,6 +1,7 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
+import com.solvd.army.dao.IAircraftDAO;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.hangar.Aircraft;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AircraftDAO implements IBaseDAO<Aircraft> {
+public class AircraftDAO implements IAircraftDAO {
     private static final String GET = "SELECT * FROM army.aircrafts WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.aircrafts";
     private static final String UPDATE = "UPDATE army.aircrafts SET army.aircrafts.name=?, " +
@@ -37,7 +38,7 @@ public class AircraftDAO implements IBaseDAO<Aircraft> {
             ps.setDate(2, object.getReleaseDate());
             ps.setInt(3, object.getNumberOfFlights());
             ps.setInt(4, object.getStrength());
-            ps.setLong(5, object.getHangars_id());
+            ps.setLong(5, object.getHangarsId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -59,14 +60,14 @@ public class AircraftDAO implements IBaseDAO<Aircraft> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Aircraft aircraft = new Aircraft();
                 aircraft.setId(rs.getInt("id"));
                 aircraft.setName(rs.getString("name"));
                 aircraft.setReleaseDate(rs.getDate("releaseDate"));
                 aircraft.setNumberOfFlights(rs.getInt("numberOfFlights"));
                 aircraft.setStrength(rs.getInt("strength"));
-                aircraft.setHangars_id(rs.getInt("Hangars_id"));
+                aircraft.setHangarsId(rs.getInt("Hangars_id"));
                 return aircraft;
             }
 
@@ -97,7 +98,7 @@ public class AircraftDAO implements IBaseDAO<Aircraft> {
                 aircraft.setReleaseDate(rs.getDate("releaseDate"));
                 aircraft.setNumberOfFlights(rs.getInt("numberOfFlights"));
                 aircraft.setStrength(rs.getInt("strength"));
-                aircraft.setHangars_id(rs.getInt("Hangars_id"));
+                aircraft.setHangarsId(rs.getInt("Hangars_id"));
                 aircrafts.add(aircraft);
             }
             return aircrafts;

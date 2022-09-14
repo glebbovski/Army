@@ -8,17 +8,17 @@ public abstract class Ship {
     private String name;
     private Date releaseDate;
     private int strength;
-    private int Jetties_id;
+    private int jettiesId;
 
     public Ship() {
     }
 
-    public Ship(int id, String name, Date releaseDate, int strength, int jetties_id) {
+    public Ship(int id, String name, Date releaseDate, int strength, int jettiesId) {
         this.id = id;
         this.name = name;
         this.releaseDate = releaseDate;
         this.strength = strength;
-        Jetties_id = jetties_id;
+        jettiesId = jettiesId;
     }
 
     public int getId() {
@@ -53,12 +53,12 @@ public abstract class Ship {
         this.strength = strength;
     }
 
-    public int getJetties_id() {
-        return Jetties_id;
+    public int getJettiesId() {
+        return jettiesId;
     }
 
-    public void setJetties_id(int jetties_id) {
-        Jetties_id = jetties_id;
+    public void setJettiesId(int jettiesId) {
+        jettiesId = jettiesId;
     }
 
     @Override
@@ -66,13 +66,13 @@ public abstract class Ship {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ship ship = (Ship) o;
-        return id == ship.id && strength == ship.strength && Jetties_id == ship.Jetties_id
+        return id == ship.id && strength == ship.strength && jettiesId == ship.jettiesId
                 && Objects.equals(name, ship.name) && Objects.equals(releaseDate, ship.releaseDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, releaseDate, strength, Jetties_id);
+        return Objects.hash(id, name, releaseDate, strength, jettiesId);
     }
 
     @Override
@@ -82,7 +82,7 @@ public abstract class Ship {
                 ", name='" + name + '\'' +
                 ", releaseDate=" + releaseDate +
                 ", strength=" + strength +
-                ", Jetties_id=" + Jetties_id +
+                ", jettiesId=" + jettiesId +
                 ", ";
     }
 }

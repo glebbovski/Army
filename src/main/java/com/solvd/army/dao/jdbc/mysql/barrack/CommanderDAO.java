@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.barrack;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.ICommanderDAO;
 import com.solvd.army.models.barrack.Commander;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommanderDAO implements IBaseDAO<Commander> {
+public class CommanderDAO implements ICommanderDAO {
     private static final String GET = "SELECT * FROM army.commanders WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.commanders";
     private static final String UPDATE = "UPDATE army.commanders SET army.commanders.name=?, army.commanders.surname=?, " +
@@ -34,7 +35,7 @@ public class CommanderDAO implements IBaseDAO<Commander> {
             ps.setString(1, commander.getName());
             ps.setString(2, commander.getSurname());
             ps.setString(3, commander.getRank());
-            ps.setInt(4, commander.getBarracks_id());
+            ps.setInt(4, commander.getBarracksId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -56,13 +57,13 @@ public class CommanderDAO implements IBaseDAO<Commander> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Commander commander = new Commander();
                 commander.setId(rs.getInt("id"));
                 commander.setName(rs.getString("name"));
                 commander.setSurname(rs.getString("surname"));
                 commander.setRank(rs.getString("rank"));
-                commander.setBarracks_id(rs.getInt("Barracks_id"));
+                commander.setBarracksId(rs.getInt("Barracks_id"));
                 return commander;
             }
 
@@ -91,7 +92,7 @@ public class CommanderDAO implements IBaseDAO<Commander> {
                 commander.setName(rs.getString("name"));
                 commander.setSurname(rs.getString("surname"));
                 commander.setRank(rs.getString("rank"));
-                commander.setBarracks_id(rs.getInt("Barracks_id"));
+                commander.setBarracksId(rs.getInt("Barracks_id"));
                 commanders.add(commander);
             }
             return commanders;

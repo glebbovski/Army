@@ -8,17 +8,17 @@ import java.util.Objects;
 public class Beginner extends Person {
     private Date beginDate;
     private Date endDate;
-    private int Barracks_id;
+    private int barracksId;
 
     public Beginner() {
         super();
     }
 
-    public Beginner(int id, String name, String surname, Date beginDate, Date endDate, int barracks_id) {
+    public Beginner(int id, String name, String surname, Date beginDate, Date endDate, int barracksId) {
         super(id, name, surname);
         this.beginDate = beginDate;
         this.endDate = endDate;
-        Barracks_id = barracks_id;
+        barracksId = barracksId;
     }
 
     public Date getBeginDate() {
@@ -37,12 +37,12 @@ public class Beginner extends Person {
         this.endDate = endDate;
     }
 
-    public int getBarracks_id() {
-        return Barracks_id;
+    public int getBarracksId() {
+        return barracksId;
     }
 
-    public void setBarracks_id(int barracks_id) {
-        Barracks_id = barracks_id;
+    public void setBarracksId(int barracksId) {
+        barracksId = barracksId;
     }
 
     @Override
@@ -51,13 +51,13 @@ public class Beginner extends Person {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Beginner beginner = (Beginner) o;
-        return Barracks_id == beginner.Barracks_id && Objects.equals(beginDate, beginner.beginDate)
+        return barracksId == beginner.barracksId && Objects.equals(beginDate, beginner.beginDate)
                 && Objects.equals(endDate, beginner.endDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), beginDate, endDate, Barracks_id);
+        return Objects.hash(super.hashCode(), beginDate, endDate, barracksId);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Beginner extends Person {
         return super.toString() + "Beginner{" +
                 "beginDate=" + beginDate +
                 ", endDate=" + endDate +
-                ", Barracks_id=" + Barracks_id +
+                ", barracksId=" + barracksId +
                 "}}";
     }
 }

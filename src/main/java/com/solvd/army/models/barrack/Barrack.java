@@ -6,16 +6,16 @@ public class Barrack {
     private int id;
     private int numberOfBeds;
     private int numberOfFloors;
-    private int Army_id;
+    private int armyId;
 
     public Barrack() {
     }
 
-    public Barrack(int id, int numberOfBeds, int numberOfFloors, int army_id) {
+    public Barrack(int id, int numberOfBeds, int numberOfFloors, int armyId) {
         this.id = id;
         this.numberOfBeds = numberOfBeds;
         this.numberOfFloors = numberOfFloors;
-        Army_id = army_id;
+        armyId = armyId;
     }
 
     public int getId() {
@@ -42,12 +42,12 @@ public class Barrack {
         this.numberOfFloors = numberOfFloors;
     }
 
-    public int getArmy_id() {
-        return Army_id;
+    public int getArmyId() {
+        return armyId;
     }
 
-    public void setArmy_id(int army_id) {
-        Army_id = army_id;
+    public void setArmyId(int armyId) {
+        armyId = armyId;
     }
 
     @Override
@@ -56,12 +56,12 @@ public class Barrack {
         if (o == null || getClass() != o.getClass()) return false;
         Barrack Barrack = (Barrack) o;
         return id == Barrack.id && numberOfBeds == Barrack.numberOfBeds
-                && numberOfFloors == Barrack.numberOfFloors && Army_id == Barrack.Army_id;
+                && numberOfFloors == Barrack.numberOfFloors && armyId == Barrack.armyId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numberOfBeds, numberOfFloors, Army_id);
+        return Objects.hash(id, numberOfBeds, numberOfFloors, armyId);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Barrack {
                 "id=" + id +
                 ", numberOfBeds=" + numberOfBeds +
                 ", numberOfFloors=" + numberOfFloors +
-                ", Army_id=" + Army_id +
+                ", armyId=" + armyId +
                 '}';
     }
 }

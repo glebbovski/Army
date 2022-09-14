@@ -7,16 +7,16 @@ import java.util.Objects;
 public class Commander extends Person {
     private String rank;
     private final int strength = 3;
-    private int Barracks_id;
+    private int barracksId;
 
     public Commander() {
         super();
     }
 
-    public Commander(int id, String name, String surname, String rank, int barracks_id) {
+    public Commander(int id, String name, String surname, String rank, int barracksId) {
         super(id, name, surname);
         this.rank = rank;
-        Barracks_id = barracks_id;
+        barracksId = barracksId;
     }
 
     public String getRank() {
@@ -31,12 +31,12 @@ public class Commander extends Person {
         return strength;
     }
 
-    public int getBarracks_id() {
-        return Barracks_id;
+    public int getBarracksId() {
+        return barracksId;
     }
 
-    public void setBarracks_id(int barracks_id) {
-        Barracks_id = barracks_id;
+    public void setBarracksId(int barracksId) {
+        barracksId = barracksId;
     }
 
     @Override
@@ -45,12 +45,12 @@ public class Commander extends Person {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Commander commander = (Commander) o;
-        return Barracks_id == commander.Barracks_id && Objects.equals(rank, commander.rank);
+        return barracksId == commander.barracksId && Objects.equals(rank, commander.rank);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), rank, strength, Barracks_id);
+        return Objects.hash(super.hashCode(), rank, strength, barracksId);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Commander extends Person {
         return super.toString() + "Commander{" +
                 "rank='" + rank + '\'' +
                 ", strength=" + strength +
-                ", Barracks_id=" + Barracks_id +
+                ", barracksId=" + barracksId +
                 "}}";
     }
 }

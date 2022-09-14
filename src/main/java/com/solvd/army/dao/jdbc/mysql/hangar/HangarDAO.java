@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IHangarDAO;
 import com.solvd.army.models.hangar.Hangar;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HangarDAO implements IBaseDAO<Hangar> {
+public class HangarDAO implements IHangarDAO {
     private static final String GET = "SELECT * FROM army.hangars WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.hangars";
     private static final String UPDATE = "UPDATE army.hangars SET army.hangars.numberOfMilitaryCraft=? " +
@@ -33,7 +34,7 @@ public class HangarDAO implements IBaseDAO<Hangar> {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setInt(1, object.getNumberOfMilitaryCraft());
-            ps.setLong(2, object.getArmy_id());
+            ps.setLong(2, object.getArmyId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -55,11 +56,11 @@ public class HangarDAO implements IBaseDAO<Hangar> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Hangar hangar = new Hangar();
                 hangar.setId(rs.getInt("id"));
                 hangar.setNumberOfMilitaryCraft(rs.getInt("numberOfMilitaryCraft"));
-                hangar.setArmy_id(rs.getInt("Army_id"));
+                hangar.setArmyId(rs.getInt("Army_id"));
                 return hangar;
             }
 
@@ -87,7 +88,7 @@ public class HangarDAO implements IBaseDAO<Hangar> {
                 Hangar hangar = new Hangar();
                 hangar.setId(rs.getInt("id"));
                 hangar.setNumberOfMilitaryCraft(rs.getInt("numberOfMilitaryCraft"));
-                hangar.setArmy_id(rs.getInt("Army_id"));
+                hangar.setArmyId(rs.getInt("Army_id"));
                 hangars.add(hangar);
             }
             return hangars;

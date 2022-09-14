@@ -5,15 +5,15 @@ import java.util.Objects;
 public class Hangar {
     private int id;
     private int numberOfMilitaryCraft;
-    private int Army_id;
+    private int armyId;
 
     public Hangar() {
     }
 
-    public Hangar(int id, int numberOfMilitaryCraft, int army_id) {
+    public Hangar(int id, int numberOfMilitaryCraft, int armyId) {
         this.id = id;
         this.numberOfMilitaryCraft = numberOfMilitaryCraft;
-        Army_id = army_id;
+        armyId = armyId;
     }
 
     public int getId() {
@@ -32,12 +32,12 @@ public class Hangar {
         this.numberOfMilitaryCraft = numberOfMilitaryCraft;
     }
 
-    public int getArmy_id() {
-        return Army_id;
+    public int getArmyId() {
+        return armyId;
     }
 
-    public void setArmy_id(int army_id) {
-        Army_id = army_id;
+    public void setArmyId(int armyId) {
+        armyId = armyId;
     }
 
     @Override
@@ -45,12 +45,12 @@ public class Hangar {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hangar Hangar = (Hangar) o;
-        return id == Hangar.id && numberOfMilitaryCraft == Hangar.numberOfMilitaryCraft && Army_id == Hangar.Army_id;
+        return id == Hangar.id && numberOfMilitaryCraft == Hangar.numberOfMilitaryCraft && armyId == Hangar.armyId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numberOfMilitaryCraft, Army_id);
+        return Objects.hash(id, numberOfMilitaryCraft, armyId);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Hangar {
         return "Hangar{" +
                 "id=" + id +
                 ", numberOfMilitaryCraft=" + numberOfMilitaryCraft +
-                ", Army_id=" + Army_id +
+                ", armyId=" + armyId +
                 '}';
     }
 }

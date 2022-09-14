@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.jettie;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IBoatDAO;
 import com.solvd.army.models.jettie.Boat;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoatDAO implements IBaseDAO<Boat> {
+public class BoatDAO implements IBoatDAO {
     private static final String GET = "SELECT * FROM army.boats WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.boats";
     private static final String UPDATE = "UPDATE army.boats SET " +
@@ -43,7 +44,7 @@ public class BoatDAO implements IBaseDAO<Boat> {
             ps.setDate(2, object.getReleaseDate());
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getStrength());
-            ps.setLong(5, object.getJetties_id());
+            ps.setLong(5, object.getJettiesId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -65,14 +66,14 @@ public class BoatDAO implements IBaseDAO<Boat> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Boat boats = new Boat();
                 boats.setId(rs.getInt("id"));
                 boats.setName(rs.getString("name"));
                 boats.setReleaseDate(rs.getDate("releaseDate"));
                 boats.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 boats.setStrength(rs.getInt("strength"));
-                boats.setJetties_id(rs.getInt("Jetties_id"));
+                boats.setJettiesId(rs.getInt("Jetties_id"));
                 return boats;
             }
 
@@ -103,7 +104,7 @@ public class BoatDAO implements IBaseDAO<Boat> {
                 boats.setReleaseDate(rs.getDate("releaseDate"));
                 boats.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 boats.setStrength(rs.getInt("strength"));
-                boats.setJetties_id(rs.getInt("Jetties_id"));
+                boats.setJettiesId(rs.getInt("Jetties_id"));
                 boatsList.add(boats);
             }
             return boatsList;

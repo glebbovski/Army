@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IMainArmyDAO;
 import com.solvd.army.models.MainArmy;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainArmyDAO implements IBaseDAO<MainArmy> {
+public class MainArmyDAO implements IMainArmyDAO {
     private static final String GET = "SELECT * FROM army.mainArmy WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.mainArmy";
     private static final String UPDATE = "UPDATE army.mainArmy SET " +
@@ -57,7 +58,7 @@ public class MainArmyDAO implements IBaseDAO<MainArmy> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 MainArmy mainArmy = new MainArmy();
                 mainArmy.setId(rs.getInt("id"));
                 mainArmy.setName(rs.getString("name"));

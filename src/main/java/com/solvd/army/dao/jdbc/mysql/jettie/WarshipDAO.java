@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.jettie;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IWarshipDAO;
 import com.solvd.army.models.jettie.Warship;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarshipDAO implements IBaseDAO<Warship> {
+public class WarshipDAO implements IWarshipDAO {
     private static final String GET = "SELECT * FROM army.warships WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.warships";
     private static final String UPDATE = "UPDATE army.warships SET " +
@@ -46,7 +47,7 @@ public class WarshipDAO implements IBaseDAO<Warship> {
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getNumberOfBombs());
             ps.setInt(5, object.getStrength());
-            ps.setLong(6, object.getJetties_id());
+            ps.setLong(6, object.getJettiesId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -68,7 +69,7 @@ public class WarshipDAO implements IBaseDAO<Warship> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Warship warship = new Warship();
                 warship.setId(rs.getInt("id"));
                 warship.setName(rs.getString("name"));
@@ -76,7 +77,7 @@ public class WarshipDAO implements IBaseDAO<Warship> {
                 warship.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 warship.setNumberOfBombs(rs.getInt("numberOfBombs"));
                 warship.setStrength(rs.getInt("strength"));
-                warship.setJetties_id(rs.getInt("Jetties_id"));
+                warship.setJettiesId(rs.getInt("Jetties_id"));
                 return warship;
             }
 
@@ -108,7 +109,7 @@ public class WarshipDAO implements IBaseDAO<Warship> {
                 warship.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 warship.setNumberOfBombs(rs.getInt("numberOfBombs"));
                 warship.setStrength(rs.getInt("strength"));
-                warship.setJetties_id(rs.getInt("Jetties_id"));
+                warship.setJettiesId(rs.getInt("Jetties_id"));
                 warships.add(warship);
             }
             return warships;

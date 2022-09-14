@@ -1,6 +1,7 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
+import com.solvd.army.dao.IArmoredPersonnelCarrierDAO;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.hangar.ArmoredPersonnelCarrier;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarrier> {
+public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
     private static final String GET = "SELECT * FROM army.armoredpersonnelcarriers WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.armoredpersonnelcarriers";
     private static final String UPDATE = "UPDATE army.armoredpersonnelcarriers SET " +
@@ -41,7 +42,7 @@ public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarr
             ps.setDate(2, object.getReleaseDate());
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getStrength());
-            ps.setLong(5, object.getHangars_id());
+            ps.setLong(5, object.getHangarsId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -63,14 +64,14 @@ public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarr
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 ArmoredPersonnelCarrier armoredPersonnelCarriers = new ArmoredPersonnelCarrier();
                 armoredPersonnelCarriers.setId(rs.getInt("id"));
                 armoredPersonnelCarriers.setName(rs.getString("name"));
                 armoredPersonnelCarriers.setReleaseDate(rs.getDate("releaseDate"));
                 armoredPersonnelCarriers.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 armoredPersonnelCarriers.setStrength(rs.getInt("strength"));
-                armoredPersonnelCarriers.setHangars_id(rs.getInt("Hangars_id"));
+                armoredPersonnelCarriers.setHangarsId(rs.getInt("Hangars_id"));
                 return armoredPersonnelCarriers;
             }
 
@@ -101,7 +102,7 @@ public class ArmoredPersonnelCarrierDAO implements IBaseDAO<ArmoredPersonnelCarr
                 armoredPersonnelCarriers.setReleaseDate(rs.getDate("releaseDate"));
                 armoredPersonnelCarriers.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 armoredPersonnelCarriers.setStrength(rs.getInt("strength"));
-                armoredPersonnelCarriers.setHangars_id(rs.getInt("Hangars_id"));
+                armoredPersonnelCarriers.setHangarsId(rs.getInt("Hangars_id"));
                 armoredPersonnelCarriersList.add(armoredPersonnelCarriers);
             }
             return armoredPersonnelCarriersList;

@@ -1,6 +1,7 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
 
 import com.solvd.army.connection.ConnectionUtil;
+import com.solvd.army.dao.IBarrackDAO;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.barrack.Barrack;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BarrackDAO implements IBaseDAO<Barrack> {
+    public class BarrackDAO implements IBarrackDAO {
     private static final String GET = "SELECT * FROM army.barracks WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.barracks";
     private static final String UPDATE = "UPDATE army.barracks SET army.barracks.numberOfBeds=?, " +
@@ -35,7 +36,7 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
             ps = connection.prepareStatement(INSERT);
             ps.setInt(1, object.getNumberOfBeds());
             ps.setInt(2, object.getNumberOfFloors());
-            ps.setLong(3, object.getArmy_id());
+            ps.setLong(3, object.getArmyId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -57,12 +58,12 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Barrack barrack = new Barrack();
                 barrack.setId(rs.getInt("id"));
                 barrack.setNumberOfBeds(rs.getInt("numberOfBeds"));
                 barrack.setNumberOfFloors(rs.getInt("numberOfFloors"));
-                barrack.setArmy_id(rs.getInt("Army_id"));
+                barrack.setArmyId(rs.getInt("Army_id"));
                 return barrack;
             }
 
@@ -91,7 +92,7 @@ public class BarrackDAO implements IBaseDAO<Barrack> {
                 barrack.setId(rs.getInt("id"));
                 barrack.setNumberOfBeds(rs.getInt("numberOfBeds"));
                 barrack.setNumberOfFloors(rs.getInt("numberOfFloors"));
-                barrack.setArmy_id(rs.getInt("Army_id"));
+                barrack.setArmyId(rs.getInt("Army_id"));
                 barracks.add(barrack);
             }
             return barracks;

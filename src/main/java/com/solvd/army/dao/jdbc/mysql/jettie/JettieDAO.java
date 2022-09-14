@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.jettie;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IJettieDAO;
 import com.solvd.army.models.jettie.Jettie;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JettieDAO implements IBaseDAO<Jettie> {
+public class JettieDAO implements IJettieDAO {
     private static final String GET = "SELECT * FROM army.jetties WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.jetties";
     private static final String UPDATE = "UPDATE army.jetties SET army.jetties.numberOfShips=? " +
@@ -33,7 +34,7 @@ public class JettieDAO implements IBaseDAO<Jettie> {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(INSERT);
             ps.setInt(1, object.getNumberOfShips());
-            ps.setLong(2, object.getArmy_id());
+            ps.setLong(2, object.getArmyId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -55,11 +56,11 @@ public class JettieDAO implements IBaseDAO<Jettie> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Jettie jettie = new Jettie();
                 jettie.setId(rs.getInt("id"));
                 jettie.setNumberOfShips(rs.getInt("numberOfShips"));
-                jettie.setArmy_id(rs.getInt("Army_id"));
+                jettie.setArmyId(rs.getInt("Army_id"));
                 return jettie;
             }
 
@@ -86,7 +87,7 @@ public class JettieDAO implements IBaseDAO<Jettie> {
                 Jettie jettie = new Jettie();
                 jettie.setId(rs.getInt("id"));
                 jettie.setNumberOfShips(rs.getInt("numberOfShips"));
-                jettie.setArmy_id(rs.getInt("Army_id"));
+                jettie.setArmyId(rs.getInt("Army_id"));
                 jetties.add(jettie);
             }
             return jetties;

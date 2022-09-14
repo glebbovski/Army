@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IInfantryFightingVehicleDAO;
 import com.solvd.army.models.hangar.InfantryFightingVehicle;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfantryFightingVehicleDAO implements IBaseDAO<InfantryFightingVehicle> {
+public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
     private static final String GET = "SELECT * FROM army.infantryfightingvehicles WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.infantryfightingvehicles";
     private static final String UPDATE = "UPDATE army.infantryfightingvehicles SET " +
@@ -41,7 +42,7 @@ public class InfantryFightingVehicleDAO implements IBaseDAO<InfantryFightingVehi
             ps.setDate(2, object.getReleaseDate());
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getStrength());
-            ps.setLong(5, object.getHangars_id());
+            ps.setLong(5, object.getHangarsId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -63,14 +64,14 @@ public class InfantryFightingVehicleDAO implements IBaseDAO<InfantryFightingVehi
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 InfantryFightingVehicle infantryFightingVehicles = new InfantryFightingVehicle();
                 infantryFightingVehicles.setId(rs.getInt("id"));
                 infantryFightingVehicles.setName(rs.getString("name"));
                 infantryFightingVehicles.setReleaseDate(rs.getDate("releaseDate"));
                 infantryFightingVehicles.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 infantryFightingVehicles.setStrength(rs.getInt("strength"));
-                infantryFightingVehicles.setHangars_id(rs.getInt("Hangars_id"));
+                infantryFightingVehicles.setHangarsId(rs.getInt("Hangars_id"));
                 return infantryFightingVehicles;
             }
 
@@ -101,7 +102,7 @@ public class InfantryFightingVehicleDAO implements IBaseDAO<InfantryFightingVehi
                 infantryFightingVehicles.setReleaseDate(rs.getDate("releaseDate"));
                 infantryFightingVehicles.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 infantryFightingVehicles.setStrength(rs.getInt("strength"));
-                infantryFightingVehicles.setHangars_id(rs.getInt("Hangars_id"));
+                infantryFightingVehicles.setHangarsId(rs.getInt("Hangars_id"));
                 infantryFightingVehicleList.add(infantryFightingVehicles);
             }
             return infantryFightingVehicleList;

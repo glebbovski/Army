@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.ITankDAO;
 import com.solvd.army.models.hangar.Tank;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TankDAO implements IBaseDAO<Tank> {
+public class TankDAO implements ITankDAO {
     private static final String GET = "SELECT * FROM army.tanks WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.tanks";
     private static final String UPDATE = "UPDATE army.tanks SET " +
@@ -43,7 +44,7 @@ public class TankDAO implements IBaseDAO<Tank> {
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getCentimetersOfArmor());
             ps.setInt(5, object.getStrength());
-            ps.setLong(6, object.getHangars_id());
+            ps.setLong(6, object.getHangarsId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -65,7 +66,7 @@ public class TankDAO implements IBaseDAO<Tank> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Tank tank = new Tank();
                 tank.setId(rs.getInt("id"));
                 tank.setName(rs.getString("name"));
@@ -73,7 +74,7 @@ public class TankDAO implements IBaseDAO<Tank> {
                 tank.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 tank.setCentimetersOfArmor(rs.getInt("centimetersOfArmor"));
                 tank.setStrength(rs.getInt("strength"));
-                tank.setHangars_id(rs.getInt("Hangars_id"));
+                tank.setHangarsId(rs.getInt("Hangars_id"));
                 return tank;
             }
 
@@ -105,7 +106,7 @@ public class TankDAO implements IBaseDAO<Tank> {
                 tank.setNumberOfGuns(rs.getInt("numberOfGuns"));
                 tank.setCentimetersOfArmor(rs.getInt("centimetersOfArmor"));
                 tank.setStrength(rs.getInt("strength"));
-                tank.setHangars_id(rs.getInt("Hangars_id"));
+                tank.setHangarsId(rs.getInt("Hangars_id"));
                 tanks.add(tank);
             }
             return tanks;

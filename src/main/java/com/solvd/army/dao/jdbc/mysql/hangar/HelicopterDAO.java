@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IHelicopterDAO;
 import com.solvd.army.models.hangar.Helicopter;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HelicopterDAO implements IBaseDAO<Helicopter> {
+public class HelicopterDAO implements IHelicopterDAO {
     private static final String GET = "SELECT * FROM army.helicopters WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.helicopters";
     private static final String UPDATE = "UPDATE army.helicopters SET army.helicopters.name=?, " +
@@ -37,7 +38,7 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
             ps.setDate(2, object.getReleaseDate());
             ps.setInt(3, object.getNumberOfFlights());
             ps.setInt(4, object.getStrength());
-            ps.setLong(5, object.getHangars_id());
+            ps.setLong(5, object.getHangarsId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -59,14 +60,14 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Helicopter helicopter = new Helicopter();
                 helicopter.setId(rs.getInt("id"));
                 helicopter.setName(rs.getString("name"));
                 helicopter.setReleaseDate(rs.getDate("releaseDate"));
                 helicopter.setNumberOfFlights(rs.getInt("numberOfFlights"));
                 helicopter.setStrength(rs.getInt("strength"));
-                helicopter.setHangars_id(rs.getInt("Hangars_id"));
+                helicopter.setHangarsId(rs.getInt("Hangars_id"));
                 return helicopter;
             }
 
@@ -97,7 +98,7 @@ public class HelicopterDAO implements IBaseDAO<Helicopter> {
                 helicopter.setReleaseDate(rs.getDate("releaseDate"));
                 helicopter.setNumberOfFlights(rs.getInt("numberOfFlights"));
                 helicopter.setStrength(rs.getInt("strength"));
-                helicopter.setHangars_id(rs.getInt("Hangars_id"));
+                helicopter.setHangarsId(rs.getInt("Hangars_id"));
                 helicopters.add(helicopter);
             }
             return helicopters;

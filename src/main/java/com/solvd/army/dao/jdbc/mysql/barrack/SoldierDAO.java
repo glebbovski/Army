@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.barrack;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.ISoldierDAO;
 import com.solvd.army.models.barrack.Soldier;
 
 
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SoldierDAO implements IBaseDAO<Soldier> {
+public class SoldierDAO implements ISoldierDAO {
     private static final String GET = "SELECT * FROM army.soldiers WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.soldiers";
     private static final String UPDATE = "UPDATE army.soldiers SET army.soldiers.name=?, army.soldiers.surname=?, " +
@@ -33,7 +34,7 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
             ps.setString(1, soldier.getName());
             ps.setString(2, soldier.getSurname());
             ps.setString(3, soldier.getRank());
-            ps.setInt(4, soldier.getBarracks_id());
+            ps.setInt(4, soldier.getBarracksId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -55,13 +56,13 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 Soldier soldier = new Soldier();
                 soldier.setId(rs.getInt("id"));
                 soldier.setName(rs.getString("name"));
                 soldier.setSurname(rs.getString("surname"));
                 soldier.setRank(rs.getString("rank"));
-                soldier.setBarracks_id(rs.getInt("Barracks_id"));
+                soldier.setBarracksId(rs.getInt("Barracks_id"));
                 return soldier;
             }
 
@@ -80,7 +81,7 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
         PreparedStatement ps = null;
         try {
             connection = ConnectionUtil.getConnection();
-            ps = connection.prepareStatement(GET);
+            ps = connection.prepareStatement(GET_ALL);
             List<Soldier> soldiers = new ArrayList<>();
 
             ResultSet rs = ps.executeQuery();
@@ -91,7 +92,7 @@ public class SoldierDAO implements IBaseDAO<Soldier> {
                 soldier.setName(rs.getString("name"));
                 soldier.setSurname(rs.getString("surname"));
                 soldier.setRank(rs.getString("rank"));
-                soldier.setBarracks_id(rs.getInt("Barracks_id"));
+                soldier.setBarracksId(rs.getInt("Barracks_id"));
                 soldiers.add(soldier);
             }
             return soldiers;

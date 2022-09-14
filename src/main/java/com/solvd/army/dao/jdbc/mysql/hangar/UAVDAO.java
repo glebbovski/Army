@@ -2,6 +2,7 @@ package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.IUAVDAO;
 import com.solvd.army.models.hangar.UAV;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UAVDAO implements IBaseDAO<UAV> {
+public class UAVDAO implements IUAVDAO {
     private static final String GET = "SELECT * FROM army.uavs WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.uavs";
     private static final String UPDATE = "UPDATE army.uavs SET army.uavs.name=?, " +
@@ -37,7 +38,7 @@ public class UAVDAO implements IBaseDAO<UAV> {
             ps.setDate(2, object.getReleaseDate());
             ps.setInt(3, object.getNumberOfBombs());
             ps.setInt(4, object.getStrength());
-            ps.setLong(5, object.getHangars_id());
+            ps.setLong(5, object.getHangarsId());
             ps.executeQuery();
 
         } catch (SQLException e) {
@@ -59,14 +60,14 @@ public class UAVDAO implements IBaseDAO<UAV> {
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 UAV uavs = new UAV();
                 uavs.setId(rs.getInt("id"));
                 uavs.setName(rs.getString("name"));
                 uavs.setReleaseDate(rs.getDate("releaseDate"));
                 uavs.setNumberOfBombs(rs.getInt("numberOfBombs"));
                 uavs.setStrength(rs.getInt("strength"));
-                uavs.setHangars_id(rs.getInt("Hangars_id"));
+                uavs.setHangarsId(rs.getInt("Hangars_id"));
                 return uavs;
             }
 
@@ -96,7 +97,7 @@ public class UAVDAO implements IBaseDAO<UAV> {
                 uavs.setReleaseDate(rs.getDate("releaseDate"));
                 uavs.setNumberOfBombs(rs.getInt("numberOfBombs"));
                 uavs.setStrength(rs.getInt("strength"));
-                uavs.setHangars_id(rs.getInt("Hangars_id"));
+                uavs.setHangarsId(rs.getInt("Hangars_id"));
                 uavList.add(uavs);
             }
             

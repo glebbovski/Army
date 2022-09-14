@@ -8,17 +8,17 @@ public abstract class HangarMilitary {
     private String name;
     private Date releaseDate;
     private int strength;
-    private int Hangars_id;
+    private int hangarsId;
 
     public HangarMilitary() {
     }
 
-    public HangarMilitary(int id, String name, Date releaseDate, int strength, int hangars_id) {
+    public HangarMilitary(int id, String name, Date releaseDate, int strength, int hangarsId) {
         this.id = id;
         this.name = name;
         this.releaseDate = releaseDate;
         this.strength = strength;
-        Hangars_id = hangars_id;
+        hangarsId = hangarsId;
     }
 
     public int getId() {
@@ -53,12 +53,12 @@ public abstract class HangarMilitary {
         this.strength = strength;
     }
 
-    public int getHangars_id() {
-        return Hangars_id;
+    public int getHangarsId() {
+        return hangarsId;
     }
 
-    public void setHangars_id(int hangars_id) {
-        Hangars_id = hangars_id;
+    public void setHangarsId(int hangarsId) {
+        hangarsId = hangarsId;
     }
 
     @Override
@@ -67,13 +67,13 @@ public abstract class HangarMilitary {
         if (o == null || getClass() != o.getClass()) return false;
         HangarMilitary that = (HangarMilitary) o;
         return id == that.id && strength == that.strength
-                && Hangars_id == that.Hangars_id && Objects.equals(name, that.name)
+                && hangarsId == that.hangarsId && Objects.equals(name, that.name)
                 && Objects.equals(releaseDate, that.releaseDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, releaseDate, strength, Hangars_id);
+        return Objects.hash(id, name, releaseDate, strength, hangarsId);
     }
 
     @Override
@@ -83,7 +83,7 @@ public abstract class HangarMilitary {
                 ", name='" + name + '\'' +
                 ", releaseDate=" + releaseDate +
                 ", strength=" + strength +
-                ", Hangars_id=" + Hangars_id +
+                ", hangarsId=" + hangarsId +
                 ", ";
     }
 }
