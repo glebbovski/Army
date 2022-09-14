@@ -3,16 +3,24 @@ package com.solvd.army.dao.jdbc.mysql.barrack;
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBarrackDAO;
 import com.solvd.army.dao.IBaseDAO;
+import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.barrack.Barrack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-    public class BarrackDAO implements IBarrackDAO {
+public class BarrackDAO implements IBarrackDAO {
+    private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final String GET = "SELECT * FROM army.barracks WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.barracks";
     private static final String UPDATE = "UPDATE army.barracks SET army.barracks.numberOfBeds=?, " +
@@ -28,7 +36,7 @@ import java.util.List;
     }
 
     @Override
-    public void create(Barrack object) {
+    public void create(Barrack object) throws AttributeNotFoundException{
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -37,7 +45,8 @@ import java.util.List;
             ps.setInt(1, object.getNumberOfBeds());
             ps.setInt(2, object.getNumberOfFloors());
             ps.setLong(3, object.getArmyId());
-            ps.executeQuery();
+            ps.executeUpdate();
+            object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -111,14 +120,15 @@ import java.util.List;
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            Barrack barrack = getById(id);
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setInt(1, barrack.getNumberOfBeds());
-            ps.setInt(2, barrack.getNumberOfFloors());
-            ps.setInt(3, barrack.getId());
-            ps.executeQuery();
+            logger.info("New numberOfBeds = ");
+            ps.setInt(1, scanner.nextInt());
+            logger.info("New numberOfFloors = ");
+            ps.setInt(2, scanner.nextInt());
+            ps.setLong(3, id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -135,12 +145,45 @@ import java.util.List;
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
             ConnectionUtil.close(ps);
             ConnectionUtil.close(connection);
         }
+    }
+
+    @Override
+    public long getObjectId(Barrack object) throws AttributeNotFoundException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+
+            ResultSet rs = ps.executeQuery();
+            List<Barrack> barracks = new ArrayList<>();
+
+            while(rs.next()) {
+                Barrack barrack = new Barrack();
+                barrack.setId(rs.getInt("id"));
+                barrack.setNumberOfBeds(rs.getInt("numberOfBeds"));
+                barrack.setNumberOfFloors(rs.getInt("numberOfFloors"));
+                barrack.setArmyId(rs.getInt("Army_id"));
+                barracks.add(barrack);
+                if(barrack.equals(object)) {
+                    return barrack.getId();
+                }
+            }
+            throw new AttributeNotFoundException();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+
     }
 }

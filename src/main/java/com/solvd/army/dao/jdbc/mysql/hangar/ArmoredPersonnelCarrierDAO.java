@@ -4,15 +4,24 @@ import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IArmoredPersonnelCarrierDAO;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.hangar.ArmoredPersonnelCarrier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
+    private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final String GET = "SELECT * FROM army.armoredpersonnelcarriers WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.armoredpersonnelcarriers";
     private static final String UPDATE = "UPDATE army.armoredpersonnelcarriers SET " +
@@ -32,7 +41,7 @@ public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
     }
 
     @Override
-    public void create(ArmoredPersonnelCarrier object) {
+    public void create(ArmoredPersonnelCarrier object) throws AttributeNotFoundException {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -43,7 +52,8 @@ public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getHangarsId());
-            ps.executeQuery();
+            ps.executeUpdate();
+            object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -120,16 +130,27 @@ public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            ArmoredPersonnelCarrier armoredPersonnelCarriers = getById(id);
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setString(1, armoredPersonnelCarriers.getName());
-            ps.setDate(2, armoredPersonnelCarriers.getReleaseDate());
-            ps.setInt(3, armoredPersonnelCarriers.getNumberOfGuns());
-            ps.setInt(4, armoredPersonnelCarriers.getStrength());
-            ps.setInt(5, armoredPersonnelCarriers.getId());
-            ps.executeQuery();
+            logger.info("New name = ");
+            ps.setString(1, scanner.nextLine());
+            logger.info("New date (like 2002-07-26) = ");
+            try {
+                String str = scanner.nextLine();
+                java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(str);
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                ps.setDate(2, sqlDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            logger.info("New numberOfGuns = ");
+            ps.setInt(3, scanner.nextInt());
+            logger.info("New strength = ");
+            ps.setInt(4, scanner.nextInt());
+            ps.setLong(5, id);
+            scanner.close();
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -146,7 +167,40 @@ public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public long getObjectId(ArmoredPersonnelCarrier object) throws AttributeNotFoundException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ArmoredPersonnelCarrier armoredPersonnelCarriers = new ArmoredPersonnelCarrier();
+                armoredPersonnelCarriers.setId(rs.getInt("id"));
+                armoredPersonnelCarriers.setName(rs.getString("name"));
+                armoredPersonnelCarriers.setReleaseDate(rs.getDate("releaseDate"));
+                armoredPersonnelCarriers.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                armoredPersonnelCarriers.setStrength(rs.getInt("strength"));
+                armoredPersonnelCarriers.setHangarsId(rs.getInt("Hangars_id"));
+
+                if (armoredPersonnelCarriers.equals(object)) {
+                    return armoredPersonnelCarriers.getId();
+                }
+            }
+            throw new AttributeNotFoundException();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

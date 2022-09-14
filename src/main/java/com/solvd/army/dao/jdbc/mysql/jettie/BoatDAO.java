@@ -3,16 +3,26 @@ package com.solvd.army.dao.jdbc.mysql.jettie;
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IBoatDAO;
+import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.jettie.Boat;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class BoatDAO implements IBoatDAO {
+    private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final String GET = "SELECT * FROM army.boats WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.boats";
     private static final String UPDATE = "UPDATE army.boats SET " +
@@ -34,7 +44,7 @@ public class BoatDAO implements IBoatDAO {
     }
 
     @Override
-    public void create(Boat object) {
+    public void create(Boat object) throws AttributeNotFoundException {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -45,7 +55,8 @@ public class BoatDAO implements IBoatDAO {
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getJettiesId());
-            ps.executeQuery();
+            ps.executeUpdate();
+            object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -122,16 +133,27 @@ public class BoatDAO implements IBoatDAO {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            Boat boats = getById(id);
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setString(1, boats.getName());
-            ps.setDate(2, boats.getReleaseDate());
-            ps.setInt(3, boats.getNumberOfGuns());
-            ps.setInt(4, boats.getStrength());
-            ps.setInt(5, boats.getId());
-            ps.executeQuery();
+            logger.info("New name = ");
+            ps.setString(1, scanner.nextLine());
+            logger.info("New date (like 2002-07-26) = ");
+            try {
+                String str = scanner.nextLine();
+                java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(str);
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                ps.setDate(2, sqlDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            logger.info("New numberOfGuns = ");
+            ps.setInt(3, scanner.nextInt());
+            logger.info("New strength = ");
+            ps.setInt(4, scanner.nextInt());
+            ps.setLong(5, id);
+            scanner.close();
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -148,7 +170,39 @@ public class BoatDAO implements IBoatDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public long getObjectId(Boat object) throws AttributeNotFoundException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Boat boats = new Boat();
+                boats.setId(rs.getInt("id"));
+                boats.setName(rs.getString("name"));
+                boats.setReleaseDate(rs.getDate("releaseDate"));
+                boats.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                boats.setStrength(rs.getInt("strength"));
+                boats.setJettiesId(rs.getInt("Jetties_id"));
+                if (boats.equals(object)) {
+                    return boats.getId();
+                }
+            }
+            throw new AttributeNotFoundException();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

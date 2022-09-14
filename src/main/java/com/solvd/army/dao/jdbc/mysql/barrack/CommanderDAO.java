@@ -3,16 +3,24 @@ package com.solvd.army.dao.jdbc.mysql.barrack;
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.ICommanderDAO;
+import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.barrack.Commander;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class CommanderDAO implements ICommanderDAO {
+    private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final String GET = "SELECT * FROM army.commanders WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.commanders";
     private static final String UPDATE = "UPDATE army.commanders SET army.commanders.name=?, army.commanders.surname=?, " +
@@ -26,7 +34,7 @@ public class CommanderDAO implements ICommanderDAO {
     }
 
     @Override
-    public void create(Commander commander) {
+    public void create(Commander commander) throws AttributeNotFoundException {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -35,8 +43,9 @@ public class CommanderDAO implements ICommanderDAO {
             ps.setString(1, commander.getName());
             ps.setString(2, commander.getSurname());
             ps.setString(3, commander.getRank());
-            ps.setInt(4, commander.getBarracksId());
-            ps.executeQuery();
+            ps.setLong(4, commander.getBarracksId());
+            ps.executeUpdate();
+            commander.setId(getObjectId(commander));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -110,15 +119,18 @@ public class CommanderDAO implements ICommanderDAO {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            Commander commander = getById(id);
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setString(1, commander.getName());
-            ps.setString(2, commander.getSurname());
-            ps.setString(3, commander.getRank());
-            ps.setInt(4, commander.getId());
-            ps.executeQuery();
+            logger.info("New name = ");
+            ps.setString(1, scanner.nextLine());
+            logger.info("New surname = ");
+            ps.setString(2, scanner.nextLine());
+            logger.info("New rank = ");
+            ps.setString(3, scanner.nextLine());
+            ps.setLong(4, id);
+            scanner.close();
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -136,7 +148,37 @@ public class CommanderDAO implements ICommanderDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public long getObjectId(Commander object) throws AttributeNotFoundException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Commander commander = new Commander();
+                commander.setId(rs.getInt("id"));
+                commander.setName(rs.getString("name"));
+                commander.setSurname(rs.getString("surname"));
+                commander.setRank(rs.getString("rank"));
+                commander.setBarracksId(rs.getInt("Barracks_id"));
+                if (commander.equals(object)) {
+                    return commander.getId();
+                }
+            }
+            throw new AttributeNotFoundException();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

@@ -3,24 +3,23 @@ package com.solvd.army.models.abstractClasses;
 import java.util.Objects;
 
 public abstract class Person {
-    private int id;
+    private long id = -1;
     private String name;
     private String surname;
 
     public Person() {
     }
 
-    public Person(int id, String name, String surname) {
-        this.id = id;
+    public Person(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -45,12 +44,12 @@ public abstract class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return id == person.id && Objects.equals(name, person.name) && Objects.equals(surname, person.surname);
+        return Objects.equals(name, person.name) && Objects.equals(surname, person.surname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname);
+        return Objects.hash(name, surname);
     }
 
     @Override

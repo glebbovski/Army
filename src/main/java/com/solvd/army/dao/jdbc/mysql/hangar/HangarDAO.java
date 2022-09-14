@@ -4,15 +4,22 @@ import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IHangarDAO;
 import com.solvd.army.models.hangar.Hangar;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class HangarDAO implements IHangarDAO {
+    private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final String GET = "SELECT * FROM army.hangars WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.hangars";
     private static final String UPDATE = "UPDATE army.hangars SET army.hangars.numberOfMilitaryCraft=? " +
@@ -27,7 +34,7 @@ public class HangarDAO implements IHangarDAO {
     }
 
     @Override
-    public void create(Hangar object) {
+    public void create(Hangar object) throws AttributeNotFoundException {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -35,7 +42,8 @@ public class HangarDAO implements IHangarDAO {
             ps = connection.prepareStatement(INSERT);
             ps.setInt(1, object.getNumberOfMilitaryCraft());
             ps.setLong(2, object.getArmyId());
-            ps.executeQuery();
+            ps.executeUpdate();
+            object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,13 +114,14 @@ public class HangarDAO implements IHangarDAO {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            Hangar hangar = getById(id);
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setInt(1, hangar.getNumberOfMilitaryCraft());
-            ps.setInt(2, hangar.getId());
-            ps.executeQuery();
+            logger.info("New numberOfMilitaryCraft = ");
+            ps.setInt(1, scanner.nextInt());
+            ps.setLong(2, id);
+            scanner.close();
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -129,7 +138,36 @@ public class HangarDAO implements IHangarDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public long getObjectId(Hangar object) throws AttributeNotFoundException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Hangar hangar = new Hangar();
+                hangar.setId(rs.getInt("id"));
+                hangar.setNumberOfMilitaryCraft(rs.getInt("numberOfMilitaryCraft"));
+                hangar.setArmyId(rs.getInt("Army_id"));
+                if (hangar.equals(object)) {
+                    return hangar.getId();
+                }
+            }
+            throw new AttributeNotFoundException();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

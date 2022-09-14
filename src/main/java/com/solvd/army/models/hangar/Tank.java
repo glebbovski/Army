@@ -13,9 +13,9 @@ public class Tank extends HangarMilitary {
         super();
     }
 
-    public Tank(int id, String name, Date releaseDate, int strength, int hangars_id,
+    public Tank(String name, java.sql.Date releaseDate, int strength, long hangarsId,
                 int numberOfGuns, int centimetersOfArmor) {
-        super(id, name, releaseDate, strength, hangars_id);
+        super(name, releaseDate, strength, hangarsId);
         this.numberOfGuns = numberOfGuns;
         this.centimetersOfArmor = centimetersOfArmor;
     }

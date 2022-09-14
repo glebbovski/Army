@@ -12,8 +12,8 @@ public class UAV extends HangarMilitary {
         super();
     }
 
-    public UAV(int id, String name, Date releaseDate, int strength, int hangars_id, int numberOfBombs) {
-        super(id, name, releaseDate, strength, hangars_id);
+    public UAV(String name, java.sql.Date releaseDate, int strength, long hangarsId, int numberOfBombs) {
+        super(name, releaseDate, strength, hangarsId);
         this.numberOfBombs = numberOfBombs;
     }
 

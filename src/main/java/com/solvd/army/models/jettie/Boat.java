@@ -12,8 +12,8 @@ public class Boat extends Ship {
         super();
     }
 
-    public Boat(int id, String name, Date releaseDate, int strength, int jetties_id, int numberOfGuns) {
-        super(id, name, releaseDate, strength, jetties_id);
+    public Boat(String name, java.sql.Date releaseDate, int strength, long jettiesId, int numberOfGuns) {
+        super(name, releaseDate, strength, jettiesId);
         this.numberOfGuns = numberOfGuns;
     }
 

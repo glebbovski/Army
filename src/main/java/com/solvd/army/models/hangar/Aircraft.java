@@ -12,8 +12,8 @@ public class Aircraft extends HangarMilitary {
         super();
     }
 
-    public Aircraft(int id, String name, Date releaseDate, int strength, int hangars_id, int numberOfFlights) {
-        super(id, name, releaseDate, strength, hangars_id);
+    public Aircraft(String name, java.sql.Date releaseDate, int strength, long hangarsId, int numberOfFlights) {
+        super(name, releaseDate, strength, hangarsId);
         this.numberOfFlights = numberOfFlights;
     }
 

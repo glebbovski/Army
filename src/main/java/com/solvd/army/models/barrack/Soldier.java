@@ -7,16 +7,16 @@ import java.util.Objects;
 public class Soldier extends Person {
     private String rank;
     private final int strength = 2;
-    private int barracksId;
+    private long barracksId;
 
     public Soldier() {
         super();
     }
 
-    public Soldier(int id, String name, String surname, String rank, int barracksId) {
-        super(id, name, surname);
+    public Soldier(String name, String surname, String rank, long barracksId) {
+        super(name, surname);
         this.rank = rank;
-        barracksId = barracksId;
+        this.barracksId = barracksId;
     }
 
     public String getRank() {
@@ -27,12 +27,12 @@ public class Soldier extends Person {
         this.rank = rank;
     }
 
-    public int getBarracksId() {
+    public long getBarracksId() {
         return barracksId;
     }
 
-    public void setBarracksId(int barracksId) {
-        barracksId = barracksId;
+    public void setBarracksId(long barracksId) {
+        this.barracksId = barracksId;
     }
 
     public int getStrength() {

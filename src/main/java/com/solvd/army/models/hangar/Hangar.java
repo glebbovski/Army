@@ -3,24 +3,23 @@ package com.solvd.army.models.hangar;
 import java.util.Objects;
 
 public class Hangar {
-    private int id;
+    private long id = -1;
     private int numberOfMilitaryCraft;
-    private int armyId;
+    private long armyId;
 
     public Hangar() {
     }
 
-    public Hangar(int id, int numberOfMilitaryCraft, int armyId) {
-        this.id = id;
+    public Hangar(int numberOfMilitaryCraft, long armyId) {
         this.numberOfMilitaryCraft = numberOfMilitaryCraft;
-        armyId = armyId;
+        this.armyId = armyId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -32,12 +31,12 @@ public class Hangar {
         this.numberOfMilitaryCraft = numberOfMilitaryCraft;
     }
 
-    public int getArmyId() {
+    public long getArmyId() {
         return armyId;
     }
 
-    public void setArmyId(int armyId) {
-        armyId = armyId;
+    public void setArmyId(long armyId) {
+        this.armyId = armyId;
     }
 
     @Override
@@ -45,12 +44,12 @@ public class Hangar {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hangar Hangar = (Hangar) o;
-        return id == Hangar.id && numberOfMilitaryCraft == Hangar.numberOfMilitaryCraft && armyId == Hangar.armyId;
+        return numberOfMilitaryCraft == Hangar.numberOfMilitaryCraft && armyId == Hangar.armyId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numberOfMilitaryCraft, armyId);
+        return Objects.hash(numberOfMilitaryCraft, armyId);
     }
 
     @Override

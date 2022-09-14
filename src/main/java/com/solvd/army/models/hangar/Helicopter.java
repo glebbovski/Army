@@ -12,8 +12,8 @@ public class Helicopter extends HangarMilitary {
         super();
     }
 
-    public Helicopter(int id, String name, Date releaseDate, int strength, int hangars_id, int numberOfFlights) {
-        super(id, name, releaseDate, strength, hangars_id);
+    public Helicopter(String name, java.sql.Date releaseDate, int strength, long hangarsId, int numberOfFlights) {
+        super(name, releaseDate, strength, hangarsId);
         this.numberOfFlights = numberOfFlights;
     }
 

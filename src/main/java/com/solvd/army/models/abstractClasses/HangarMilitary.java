@@ -4,28 +4,27 @@ import java.sql.Date;
 import java.util.Objects;
 
 public abstract class HangarMilitary {
-    private int id;
+    private long id = -1;
     private String name;
-    private Date releaseDate;
+    private java.sql.Date releaseDate;
     private int strength;
-    private int hangarsId;
+    private long hangarsId;
 
     public HangarMilitary() {
     }
 
-    public HangarMilitary(int id, String name, Date releaseDate, int strength, int hangarsId) {
-        this.id = id;
+    public HangarMilitary(String name, java.sql.Date releaseDate, int strength, long hangarsId) {
         this.name = name;
         this.releaseDate = releaseDate;
         this.strength = strength;
-        hangarsId = hangarsId;
+        this.hangarsId = hangarsId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -37,11 +36,11 @@ public abstract class HangarMilitary {
         this.name = name;
     }
 
-    public Date getReleaseDate() {
+    public java.sql.Date getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(java.sql.Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -53,12 +52,12 @@ public abstract class HangarMilitary {
         this.strength = strength;
     }
 
-    public int getHangarsId() {
+    public long getHangarsId() {
         return hangarsId;
     }
 
-    public void setHangarsId(int hangarsId) {
-        hangarsId = hangarsId;
+    public void setHangarsId(long hangarsId) {
+        this.hangarsId = hangarsId;
     }
 
     @Override
@@ -66,14 +65,14 @@ public abstract class HangarMilitary {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HangarMilitary that = (HangarMilitary) o;
-        return id == that.id && strength == that.strength
+        return strength == that.strength
                 && hangarsId == that.hangarsId && Objects.equals(name, that.name)
                 && Objects.equals(releaseDate, that.releaseDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, releaseDate, strength, hangarsId);
+        return Objects.hash(name, releaseDate, strength, hangarsId);
     }
 
     @Override

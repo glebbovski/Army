@@ -13,9 +13,9 @@ public class Submarine extends Ship {
         super();
     }
 
-    public Submarine(int id, String name, Date releaseDate, int strength, int jetties_id,
+    public Submarine(String name, java.sql.Date releaseDate, int strength, long jettiesId,
                      int numberOfBombs, int numberOfEchoSounders) {
-        super(id, name, releaseDate, strength, jetties_id);
+        super(name, releaseDate, strength, jettiesId);
         this.numberOfBombs = numberOfBombs;
         this.numberOfEchoSounders = numberOfEchoSounders;
     }

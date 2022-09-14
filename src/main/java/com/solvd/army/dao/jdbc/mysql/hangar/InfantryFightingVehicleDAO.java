@@ -4,15 +4,24 @@ import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IInfantryFightingVehicleDAO;
 import com.solvd.army.models.hangar.InfantryFightingVehicle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
+    private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final String GET = "SELECT * FROM army.infantryfightingvehicles WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.infantryfightingvehicles";
     private static final String UPDATE = "UPDATE army.infantryfightingvehicles SET " +
@@ -32,7 +41,7 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
     }
 
     @Override
-    public void create(InfantryFightingVehicle object) {
+    public void create(InfantryFightingVehicle object) throws AttributeNotFoundException {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -43,7 +52,8 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
             ps.setInt(3, object.getNumberOfGuns());
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getHangarsId());
-            ps.executeQuery();
+            ps.executeUpdate();
+            object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -120,16 +130,27 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            InfantryFightingVehicle infantryFightingVehicles = getById(id);
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setString(1, infantryFightingVehicles.getName());
-            ps.setDate(2, infantryFightingVehicles.getReleaseDate());
-            ps.setInt(3, infantryFightingVehicles.getNumberOfGuns());
-            ps.setInt(4, infantryFightingVehicles.getStrength());
-            ps.setInt(5, infantryFightingVehicles.getId());
-            ps.executeQuery();
+            logger.info("New name = ");
+            ps.setString(1, scanner.nextLine());
+            logger.info("New date (like 2002-07-26) = ");
+            try {
+                String str = scanner.nextLine();
+                java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(str);
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                ps.setDate(2, sqlDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            logger.info("New numberOfGuns = ");
+            ps.setInt(3, scanner.nextInt());
+            logger.info("New strength = ");
+            ps.setInt(4, scanner.nextInt());
+            ps.setLong(5, id);
+            scanner.close();
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -146,7 +167,39 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public long getObjectId(InfantryFightingVehicle object) throws AttributeNotFoundException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                InfantryFightingVehicle infantryFightingVehicles = new InfantryFightingVehicle();
+                infantryFightingVehicles.setId(rs.getInt("id"));
+                infantryFightingVehicles.setName(rs.getString("name"));
+                infantryFightingVehicles.setReleaseDate(rs.getDate("releaseDate"));
+                infantryFightingVehicles.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                infantryFightingVehicles.setStrength(rs.getInt("strength"));
+                infantryFightingVehicles.setHangarsId(rs.getInt("Hangars_id"));
+                if (infantryFightingVehicles.equals(object)) {
+                    return infantryFightingVehicles.getId();
+                }
+            }
+            throw new AttributeNotFoundException();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

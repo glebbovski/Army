@@ -4,28 +4,27 @@ import java.sql.Date;
 import java.util.Objects;
 
 public abstract class Ship {
-    private int id;
+    private long id = -1;
     private String name;
-    private Date releaseDate;
+    private java.sql.Date releaseDate;
     private int strength;
-    private int jettiesId;
+    private long jettiesId;
 
     public Ship() {
     }
 
-    public Ship(int id, String name, Date releaseDate, int strength, int jettiesId) {
-        this.id = id;
+    public Ship(String name, java.sql.Date releaseDate, int strength, long jettiesId) {
         this.name = name;
         this.releaseDate = releaseDate;
         this.strength = strength;
-        jettiesId = jettiesId;
+        this.jettiesId = jettiesId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -37,11 +36,11 @@ public abstract class Ship {
         this.name = name;
     }
 
-    public Date getReleaseDate() {
+    public java.sql.Date getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(java.sql.Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -53,12 +52,12 @@ public abstract class Ship {
         this.strength = strength;
     }
 
-    public int getJettiesId() {
+    public long getJettiesId() {
         return jettiesId;
     }
 
-    public void setJettiesId(int jettiesId) {
-        jettiesId = jettiesId;
+    public void setJettiesId(long jettiesId) {
+        this.jettiesId = jettiesId;
     }
 
     @Override
@@ -66,13 +65,13 @@ public abstract class Ship {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ship ship = (Ship) o;
-        return id == ship.id && strength == ship.strength && jettiesId == ship.jettiesId
+        return strength == ship.strength && jettiesId == ship.jettiesId
                 && Objects.equals(name, ship.name) && Objects.equals(releaseDate, ship.releaseDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, releaseDate, strength, jettiesId);
+        return Objects.hash(name, releaseDate, strength, jettiesId);
     }
 
     @Override

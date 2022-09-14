@@ -3,16 +3,26 @@ package com.solvd.army.dao.jdbc.mysql.barrack;
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IBeginnerDAO;
+import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.barrack.Beginner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class BeginnerDAO implements IBeginnerDAO {
+    private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final String GET = "SELECT * FROM army.beginners WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM army.beginners";
     private static final String UPDATE = "UPDATE army.beginners SET army.beginners.name=?, army.beginners.surname=?, " +
@@ -26,7 +36,7 @@ public class BeginnerDAO implements IBeginnerDAO {
     }
 
     @Override
-    public void create(Beginner object) {
+    public void create(Beginner object) throws AttributeNotFoundException{
         Connection connection = null;
         PreparedStatement ps = null;
         try {
@@ -37,7 +47,8 @@ public class BeginnerDAO implements IBeginnerDAO {
             ps.setDate(3, object.getBeginDate());
             ps.setDate(4, object.getEndDate());
             ps.setLong(5, object.getBarracksId());
-            ps.executeQuery();
+            ps.executeUpdate();
+            object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -113,16 +124,35 @@ public class BeginnerDAO implements IBeginnerDAO {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            Beginner beginner = getById(id);
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            ps.setString(1, beginner.getName());
-            ps.setString(2, beginner.getSurname());
-            ps.setDate(3, beginner.getBeginDate());
-            ps.setDate(4, beginner.getEndDate());
-            ps.setInt(5, beginner.getId());
-            ps.executeQuery();
+            logger.info("New name = ");
+            ps.setString(1, scanner.nextLine());
+            logger.info("New surname = ");
+            ps.setString(2, scanner.nextLine());
+            logger.info("New beginDate (like 2002-07-26) = ");
+            try {
+                String str = scanner.nextLine();
+                java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(str);
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                ps.setDate(3, sqlDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            logger.info("New endDate = ");
+            try {
+                String str = scanner.nextLine();
+                java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(str);
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                ps.setDate(4, sqlDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            ps.setLong(5, id);
+            scanner.close();
+
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -139,7 +169,38 @@ public class BeginnerDAO implements IBeginnerDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public long getObjectId(Beginner object) throws AttributeNotFoundException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Beginner beginner = new Beginner();
+                beginner.setId(rs.getInt("id"));
+                beginner.setName(rs.getString("name"));
+                beginner.setSurname(rs.getString("surname"));
+                beginner.setBeginDate(rs.getDate("beginDate"));
+                beginner.setEndDate(rs.getDate("endDate"));
+                beginner.setBarracksId(rs.getInt("Barracks_id"));
+                if (object.equals(beginner)) {
+                    return beginner.getId();
+                }
+            }
+            throw new AttributeNotFoundException();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

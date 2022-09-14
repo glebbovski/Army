@@ -3,26 +3,25 @@ package com.solvd.army.models.barrack;
 import java.util.Objects;
 
 public class Barrack {
-    private int id;
+    private long id = -1;
     private int numberOfBeds;
     private int numberOfFloors;
-    private int armyId;
+    private long armyId;
 
     public Barrack() {
     }
 
-    public Barrack(int id, int numberOfBeds, int numberOfFloors, int armyId) {
-        this.id = id;
+    public Barrack(int numberOfBeds, int numberOfFloors, long armyId) {
         this.numberOfBeds = numberOfBeds;
         this.numberOfFloors = numberOfFloors;
-        armyId = armyId;
+        this.armyId = armyId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -42,12 +41,12 @@ public class Barrack {
         this.numberOfFloors = numberOfFloors;
     }
 
-    public int getArmyId() {
+    public long getArmyId() {
         return armyId;
     }
 
-    public void setArmyId(int armyId) {
-        armyId = armyId;
+    public void setArmyId(long armyId) {
+        this.armyId = armyId;
     }
 
     @Override
@@ -55,7 +54,7 @@ public class Barrack {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Barrack Barrack = (Barrack) o;
-        return id == Barrack.id && numberOfBeds == Barrack.numberOfBeds
+        return numberOfBeds == Barrack.numberOfBeds
                 && numberOfFloors == Barrack.numberOfFloors && armyId == Barrack.armyId;
     }
 

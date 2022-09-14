@@ -12,8 +12,8 @@ public class ArmoredPersonnelCarrier extends HangarMilitary {
         super();
     }
 
-    public ArmoredPersonnelCarrier(int id, String name, Date releaseDate, int strength, int hangars_id, int numberOfGuns) {
-        super(id, name, releaseDate, strength, hangars_id);
+    public ArmoredPersonnelCarrier(String name, java.sql.Date releaseDate, int strength, long hangarsId, int numberOfGuns) {
+        super(name, releaseDate, strength, hangarsId);
         this.numberOfGuns = numberOfGuns;
     }
 

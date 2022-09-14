@@ -3,24 +3,23 @@ package com.solvd.army.models.jettie;
 import java.util.Objects;
 
 public class Jettie {
-    private int id;
+    private long id = -1;
     private int numberOfShips;
-    private int armyId;
+    private long armyId;
 
     public Jettie() {
     }
 
-    public Jettie(int id, int numberOfShips, int armyId) {
-        this.id = id;
+    public Jettie(int numberOfShips, long armyId) {
         this.numberOfShips = numberOfShips;
-        armyId = armyId;
+        this.armyId = armyId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -32,12 +31,12 @@ public class Jettie {
         this.numberOfShips = numberOfShips;
     }
 
-    public int getArmyId() {
+    public long getArmyId() {
         return armyId;
     }
 
-    public void setArmyId(int armyId) {
-        armyId = armyId;
+    public void setArmyId(long armyId) {
+        this.armyId = armyId;
     }
 
     @Override
@@ -45,12 +44,12 @@ public class Jettie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Jettie Jettie = (Jettie) o;
-        return id == Jettie.id && numberOfShips == Jettie.numberOfShips && armyId == Jettie.armyId;
+        return numberOfShips == Jettie.numberOfShips && armyId == Jettie.armyId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numberOfShips, armyId);
+        return Objects.hash(numberOfShips, armyId);
     }
 
     @Override

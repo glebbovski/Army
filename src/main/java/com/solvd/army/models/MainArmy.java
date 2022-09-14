@@ -3,24 +3,23 @@ package com.solvd.army.models;
 import java.util.Objects;
 
 public class MainArmy {
-    private int id;
+    private long id = -1;
     private String name;
     private int rating;
 
     public MainArmy() {
     }
 
-    public MainArmy(int id, String name, int rating) {
-        this.id = id;
+    public MainArmy(String name, int rating) {
         this.name = name;
         this.rating = rating;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -45,7 +44,7 @@ public class MainArmy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MainArmy mainArmy = (MainArmy) o;
-        return id == mainArmy.id && rating == mainArmy.rating && Objects.equals(name, mainArmy.name);
+        return rating == mainArmy.rating && Objects.equals(name, mainArmy.name);
     }
 
     @Override

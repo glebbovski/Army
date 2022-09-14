@@ -6,43 +6,43 @@ import java.sql.Date;
 import java.util.Objects;
 
 public class Beginner extends Person {
-    private Date beginDate;
-    private Date endDate;
-    private int barracksId;
+    private java.sql.Date beginDate;
+    private java.sql.Date endDate;
+    private long barracksId;
 
     public Beginner() {
         super();
     }
 
-    public Beginner(int id, String name, String surname, Date beginDate, Date endDate, int barracksId) {
-        super(id, name, surname);
+    public Beginner(String name, String surname, java.sql.Date beginDate, java.sql.Date endDate, long barracksId) {
+        super(name, surname);
         this.beginDate = beginDate;
         this.endDate = endDate;
-        barracksId = barracksId;
+        this.barracksId = barracksId;
     }
 
-    public Date getBeginDate() {
+    public java.sql.Date getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(java.sql.Date beginDate) {
         this.beginDate = beginDate;
     }
 
-    public Date getEndDate() {
+    public java.sql.Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(java.sql.Date endDate) {
         this.endDate = endDate;
     }
 
-    public int getBarracksId() {
+    public long getBarracksId() {
         return barracksId;
     }
 
-    public void setBarracksId(int barracksId) {
-        barracksId = barracksId;
+    public void setBarracksId(long barracksId) {
+        this.barracksId = barracksId;
     }
 
     @Override
