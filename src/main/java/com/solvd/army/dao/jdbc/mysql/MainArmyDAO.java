@@ -32,6 +32,8 @@ public class MainArmyDAO implements IMainArmyDAO {
             "\n" +
             "VALUES (?, ?)";
     private static final String DELETE = "DELETE FROM army.mainArmy WHERE id=?";
+    private static final String COUNT = "SELECT COUNT(*) FROM army.mainarmy";
+    private static final String NAMES = "SELECT name FROM army.mainarmy";
 
     public MainArmyDAO() {
     }
@@ -174,6 +176,53 @@ public class MainArmyDAO implements IMainArmyDAO {
             }
 
             throw new AttributeNotFoundException();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int getRowsCount() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(COUNT);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                return rs.getInt("COUNT(*)");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+        return 0;
+    }
+
+    @Override
+    public List<String> getArmiesNames() {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(NAMES);
+            List<String> lst = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lst.add(rs.getString("name"));
+            }
+            return lst;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
