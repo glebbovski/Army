@@ -1,54 +1,5 @@
 USE army;
 
-DELETE FROM army.soldiers
-WHERE army.soldiers.id >= 1;
-
-DELETE FROM army.commanders
-WHERE army.commanders.id >= 1;
-
-DELETE FROM army.beginners
-WHERE army.beginners.id >= 1;
-
-DELETE FROM army.tanks
-WHERE army.tanks.id >= 1;
-
-DELETE FROM army.aircrafts
-WHERE army.aircrafts.id >= 1;
-
-DELETE FROM army.armoredpersonnelcarriers
-WHERE army.armoredpersonnelcarriers.id >= 1;
-
-DELETE FROM army.barracks
-WHERE army.barracks.id >= 1;
-
-DELETE FROM army.boats
-WHERE army.boats.id >= 1;
-
-DELETE FROM army.helicopters
-WHERE army.helicopters.id >= 1;
-
-DELETE FROM army.infantryfightingvehicles
-WHERE army.infantryfightingvehicles.id >= 1;
-
-DELETE FROM army.submarines
-WHERE army.submarines.id >= 1;
-
-DELETE FROM army.uavs
-WHERE army.uavs.id >= 1;
-
-DELETE FROM army.warships
-WHERE army.warships.id >= 1;
-
-DELETE FROM army.jetties
-WHERE army.jetties.id >= 1;
-
-DELETE FROM army.hangars
-WHERE army.hangars.id >= 1;
-
-DELETE FROM army.mainarmy
-WHERE army.mainarmy.id >= 1;
-
-
 INSERT INTO mainarmy (name, rating)
 VALUES ('Scotland_Army', 157), ('Poland_Army', 156), ('Ukraine_Army', 1), ('UK_Army', 2), ('USA_Army', 3);
 
@@ -109,12 +60,12 @@ INSERT INTO uavs (name, releaseDate, numberOfBombs, strength, Hangars_id)
 VALUES ('Bayraktar', "2001-01-30 00:00:50", 2, 2, 3), ('Bayraktar-MV', "2006-05-18 00:00:00", 5, 5, 3);
 
 INSERT INTO warships (name, releaseDate, numberOfGuns, numberOfBombs, strength, Jetties_id)
-VALUES ('Rokford', "2015-04-04 00:00:00", 14, 25, 7, 3), ('Prikorda', "2012-03-06 00:00:47", 24, 15, 8, 2), ('Jokoma', "2014-06-03 00:12:00", 18, 29, 10, 5),
-('Ekolda', "2008-01-01 00:00:00", 9, 9, 4, 1), ('Dalicio', "2018-11-03 09:47:11", 11, 35, 14, 4);
+VALUES ('Rokford', "2015-04-04 00:00:00", 14, 25, 7, 3), ('Prikorda', "2012-03-06 00:00:47", 24, 15, 8, 2), ('Jokoma', "2014-06-03 00:12:00", 18, 29, 8, 5),
+('Ekolda', "2008-01-01 00:00:00", 9, 9, 4, 1), ('Dalicio', "2018-11-03 09:47:11", 11, 35, 7, 4);
 
 
 
-UPDATE warships SET strength = 10 WHERE id = 2;
+UPDATE warships SET strength = 8 WHERE id = 2;
 
 UPDATE uavs SET numberOfBombs = 4 WHERE id = 2;
 
