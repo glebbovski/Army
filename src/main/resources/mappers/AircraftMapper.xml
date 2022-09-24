@@ -1,0 +1,26 @@
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.army.dao.IAircraftDAO">
+    <resultMap id="aircraft" type="com.solvd.army.models.hangar.Aircraft">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="releaseDate" column="releaseDate"/>
+        <result property="strength" column="strength"/>
+        <result property="hangarsId" column="Hangars_id"/>
+        <result property="numberOfFlights" column="numberOfFlights"/>
+    </resultMap>
+    <select id="getById" parameterType="java.lang.Long" resultType="com.solvd.army.models.hangar.Aircraft">  <!-- ссылка на ResultMap по которому и будет происходить мапинг-->
+        SELECT * FROM aircrafts where id = #{id}
+    </select>
+    <select id="getAllRows" resultMap="aircraft">
+        SELECT * FROM aircrafts
+    </select>
+    <insert id="create" parameterType="com.solvd.army.models.hangar.Aircraft">
+        INSERT INTO aircrafts (name, releaseDate, numberOfFlights, strength, Hangars_id)
+        VALUES (#{name}, #{releaseDate}, #{numberOfFlights}, #{strength}, #{hangarsId})
+    </insert>
+    <update id="update" parameterType="java.lang.Long" parameterMap="">
+        UPDATE army.aircrafts SET army.aircrafts.name=#{name},
+        army.aircrafts.releaseDate=#{releaseDate},
+        army.aircrafts.numberOfFlights=#{numberOfFlights}, army.aircrafts.strength=#{strength} WHERE army.aircrafts.id=#{id}
+    </update>
+</mapper>
