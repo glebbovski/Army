@@ -1,0 +1,40 @@
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.army.dao.IWarshipDAO">
+    <resultMap id="warship" type="com.solvd.army.models.jettie.Warship">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="releaseDate" column="releaseDate"/>
+        <result property="strength" column="strength"/>
+        <result property="jettiesId" column="Jetties_id"/>
+        <result property="numberOfGuns" column="numberOfGuns"/>
+        <result property="numberOfBombs" column="numberOfBombs"/>
+    </resultMap>
+    <select id="getById" parameterType="java.lang.Long" resultType="com.solvd.army.models.jettie.Warship">
+        SELECT * FROM army.warships WHERE id=#{id}
+    </select>
+    <select id="getAllRows" resultMap="warship">
+        SELECT * FROM army.warships
+    </select>
+    <insert id="create" parameterType="com.solvd.army.models.jettie.Warship">
+        INSERT INTO army.warships
+        (army.warships.name,
+        army.warships.releaseDate,
+        army.warships.numberOfGuns,
+        army.warships.numberOfBombs,
+        army.warships.strength,
+        army.warships.Jetties_id)
+        VALUES (#{name}, #{releaseDate}, #{numberOfGuns}, #{numberOfBombs}, #{strength}, #{jettiesId})
+    </insert>
+    <update id="update" parameterType="com.solvd.army.models.jettie.Warship">
+        UPDATE army.warships SET
+        army.warships.name=#{name},
+        army.warships.releaseDate=#{releaseDate},
+        army.warships.numberOfGuns=#{numberOfGuns},
+        army.warships.numberOfBombs=#{numberOfBombs},
+        army.warships.strength=#{strength}
+        WHERE army.warships.id=#{id}
+    </update>
+    <delete id="remove" parameterType="java.lang.Long">
+        DELETE FROM army.warships WHERE id=#{id}
+    </delete>
+</mapper>

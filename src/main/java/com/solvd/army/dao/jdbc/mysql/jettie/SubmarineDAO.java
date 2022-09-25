@@ -66,6 +66,7 @@ public class SubmarineDAO implements ISubmarineDAO {
         } finally {
             ConnectionUtil.close(ps);
             ConnectionUtil.close(connection);
+
         }
     }
 

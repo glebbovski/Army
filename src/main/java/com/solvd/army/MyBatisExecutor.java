@@ -2,7 +2,9 @@ package com.solvd.army;
 
 import com.mysql.cj.Session;
 import com.solvd.army.dao.IAircraftDAO;
+import com.solvd.army.dao.ISubmarineDAO;
 import com.solvd.army.models.hangar.Aircraft;
+import com.solvd.army.models.jettie.Submarine;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.io.Resources;
@@ -20,41 +22,60 @@ public class MyBatisExecutor {
 
     public static void main(String[] args) throws AttributeNotFoundException {
         SqlSessionFactory sqlSessionFactory;
-        IAircraftDAO aircraftDAO;
+        ISubmarineDAO submarineDAO;
         Reader reader = null;
         try {
             reader = Resources.getResourceAsReader("mybatis-config.xml");
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             SqlSession session = sqlSessionFactory.openSession();
-            aircraftDAO = session.getMapper(IAircraftDAO.class);
-//            logger.info("------------BEFORE CREATION-------------");
-//            List<Aircraft> aircrafts = aircraftDAO.getAllRows();
-//            for(Aircraft f : aircrafts) {
-//                logger.info(f);
-//            }
-//            aircraftDAO.create(new Aircraft("Let4ik", new java.sql.Date(106, 7, 27), 4, 1, 16));
-//            logger.info("------------AFTER CREATION-------------");
-//            aircrafts = aircraftDAO.getAllRows();
-//            for(Aircraft f : aircrafts) {
-//                logger.info(f);
-//            }
+            submarineDAO = session.getMapper(ISubmarineDAO.class);
 
-            Aircraft aircraft = aircraftDAO.getById(2);
-            logger.info("----------------------------------------");
-            for(Aircraft f : aircraftDAO.getAllRows()) {
-                logger.info(f);
+            // TODO READ
+            for(Submarine s : submarineDAO.getAllRows()) {
+                logger.info(s);
             }
-            aircraft.setNumberOfFlights(15);
-            aircraft.setName("Let4iuk");
+            // TODO CREATE
+            logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            logger.info("CREATED");
+            logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Submarine submarine = new Submarine("Mineska",
+                    new java.sql.Date(106, 7, 27), 5, 2, 7, 2);
+            submarineDAO.create(submarine);
+            for(Submarine s : submarineDAO.getAllRows()) {
+                logger.info(s);
+            }
+            session.commit();
 
-            aircraftDAO.update(2);
-            logger.info("++++++++++++++++++++++++++++++++++++++++++++++");
-            for(Aircraft f : aircraftDAO.getAllRows()) {
-                logger.info(f);
+            submarine.setId(submarineDAO.getAllRows().get(submarineDAO.getAllRows().size() - 1).getId()); // getting ID
+
+            // TODO UPDATE
+            logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            logger.info("UPDATED");
+            logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+            submarine.setName("Nieve");
+            submarine.setNumberOfBombs(0);
+            submarineDAO.update(submarine);
+
+            session.commit();
+
+            for(Submarine s : submarineDAO.getAllRows()) {
+                logger.info(s);
             }
 
+            // TODO DELETE
+            logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            logger.info("DELETED");
+            logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
+            submarineDAO.remove(submarine.getId());
+            session.commit();
 
+            for(Submarine s : submarineDAO.getAllRows()) {
+                logger.info(s);
+            }
+
+            session.close();
 
 
         } catch (IOException e) {

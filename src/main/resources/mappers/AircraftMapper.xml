@@ -8,7 +8,7 @@
         <result property="hangarsId" column="Hangars_id"/>
         <result property="numberOfFlights" column="numberOfFlights"/>
     </resultMap>
-    <select id="getById" parameterType="java.lang.Long" resultType="com.solvd.army.models.hangar.Aircraft">  <!-- ссылка на ResultMap по которому и будет происходить мапинг-->
+    <select id="getById" parameterType="java.lang.Long" resultType="com.solvd.army.models.hangar.Aircraft">
         SELECT * FROM aircrafts where id = #{id}
     </select>
     <select id="getAllRows" resultMap="aircraft">
@@ -18,9 +18,13 @@
         INSERT INTO aircrafts (name, releaseDate, numberOfFlights, strength, Hangars_id)
         VALUES (#{name}, #{releaseDate}, #{numberOfFlights}, #{strength}, #{hangarsId})
     </insert>
-    <update id="update" parameterType="java.lang.Long" parameterMap="">
+    <update id="update" parameterType="com.solvd.army.models.hangar.Aircraft">
         UPDATE army.aircrafts SET army.aircrafts.name=#{name},
         army.aircrafts.releaseDate=#{releaseDate},
-        army.aircrafts.numberOfFlights=#{numberOfFlights}, army.aircrafts.strength=#{strength} WHERE army.aircrafts.id=#{id}
+        army.aircrafts.numberOfFlights=#{numberOfFlights}, army.aircrafts.strength=#{strength}
+        WHERE army.aircrafts.id=#{id}
     </update>
+    <delete id="remove" parameterType="java.lang.Long">
+        DELETE FROM army.aircrafts WHERE id=#{id}
+    </delete>
 </mapper>

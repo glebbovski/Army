@@ -1,0 +1,30 @@
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.army.dao.IHelicopterDAO">
+    <resultMap id="helicopter" type="com.solvd.army.models.hangar.Helicopter">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="releaseDate" column="releaseDate"/>
+        <result property="strength" column="strength"/>
+        <result property="hangarsId" column="Hangars_id"/>
+        <result property="numberOfFlights" column="numberOfFlights"/>
+    </resultMap>
+    <select id="getById" parameterType="java.lang.Long" resultType="com.solvd.army.models.hangar.Helicopter">
+        SELECT * FROM helicopters where id = #{id}
+    </select>
+    <select id="getAllRows" resultMap="helicopter">
+        SELECT * FROM helicopters
+    </select>
+    <insert id="create" parameterType="com.solvd.army.models.hangar.Helicopter">
+        INSERT INTO helicopters (name, releaseDate, numberOfFlights, strength, Hangars_id)
+        VALUES (#{name}, #{releaseDate}, #{numberOfFlights}, #{strength}, #{hangarsId})
+    </insert>
+    <update id="update" parameterType="com.solvd.army.models.hangar.Helicopter">
+        UPDATE army.helicopters SET army.helicopters.name=#{name},
+        army.helicopters.releaseDate=#{releaseDate},
+        army.helicopters.numberOfFlights=#{numberOfFlights}, army.helicopters.strength=#{strength}
+        WHERE army.helicopters.id=#{id}
+    </update>
+    <delete id="remove" parameterType="java.lang.Long">
+        DELETE FROM army.helicopters WHERE id=#{id}
+    </delete>
+</mapper>

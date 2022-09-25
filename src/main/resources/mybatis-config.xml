@@ -21,5 +21,9 @@
     </environments>
     <mappers>
         <mapper resource="mappers/AircraftMapper.xml"/>
+        <mapper resource="mappers/SoldierMapper.xml"/>
+        <mapper resource="mappers/HelicopterMapper.xml"/>
+        <mapper resource="mappers/WarshipMapper.xml"/>
+        <mapper resource="mappers/SubmarineMapper.xml"/>
     </mappers>
 </configuration>

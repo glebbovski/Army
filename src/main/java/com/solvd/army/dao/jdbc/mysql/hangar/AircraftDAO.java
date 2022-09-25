@@ -187,7 +187,6 @@ public class AircraftDAO implements IAircraftDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(DELETE);
             ps.setLong(1, id);
-            // TODO
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
