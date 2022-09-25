@@ -160,6 +160,29 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
     }
 
     @Override
+    public void update(InfantryFightingVehicle object) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(UPDATE);
+
+            ps.setString(1, object.getName());
+            logger.info("New date (like 2002-07-26) = ");
+            ps.setDate(2, object.getReleaseDate());
+            ps.setInt(3, object.getNumberOfGuns());
+            ps.setInt(4, object.getStrength());
+            ps.setLong(5, object.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
     public void remove(long id) {
         Connection connection = null;
         PreparedStatement ps = null;

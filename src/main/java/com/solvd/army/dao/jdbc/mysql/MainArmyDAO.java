@@ -139,6 +139,26 @@ public class MainArmyDAO implements IMainArmyDAO {
     }
 
     @Override
+    public void update(MainArmy object) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(UPDATE);
+
+            ps.setString(1, object.getName());
+            ps.setInt(2, object.getRating());
+            ps.setLong(3, object.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
     public void remove(long id) {
         Connection connection = null;
         PreparedStatement ps = null;

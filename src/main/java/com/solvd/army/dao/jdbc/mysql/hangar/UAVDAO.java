@@ -156,6 +156,28 @@ public class UAVDAO implements IUAVDAO {
     }
 
     @Override
+    public void update(UAV object) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(UPDATE);
+
+            ps.setString(1, object.getName());
+            ps.setDate(2, object.getReleaseDate());
+            ps.setInt(3, object.getNumberOfBombs());
+            ps.setInt(4, object.getStrength());
+            ps.setLong(5, object.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
     public void remove(long id) {
         Connection connection = null;
         PreparedStatement ps = null;

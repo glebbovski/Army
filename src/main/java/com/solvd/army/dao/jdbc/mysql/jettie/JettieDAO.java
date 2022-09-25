@@ -131,6 +131,25 @@ public class JettieDAO implements IJettieDAO {
     }
 
     @Override
+    public void update(Jettie object) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(UPDATE);
+
+            ps.setInt(1, object.getNumberOfShips());
+            ps.setLong(2, object.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
     public void remove(long id) {
         Connection connection = null;
         PreparedStatement ps = null;

@@ -141,6 +141,28 @@ public class CommanderDAO implements ICommanderDAO {
     }
 
     @Override
+    public void update(Commander object) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(UPDATE);
+
+            ps.setString(1, object.getName());
+            ps.setString(2, object.getSurname());
+            ps.setString(3, object.getRank());
+            ps.setLong(4, object.getId());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
     public void remove(long id) {
         Connection connection = null;
         PreparedStatement ps = null;

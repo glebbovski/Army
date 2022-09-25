@@ -14,6 +14,7 @@ public interface IBaseDAO<T> {
     T getById (long id);
     List<T> getAllRows();
     void update (long id);
+    void update (T object);
     void remove (long id);
     long getObjectId(T object) throws AttributeNotFoundException;
 

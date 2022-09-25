@@ -129,7 +129,6 @@ public class AircraftDAO implements IAircraftDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(UPDATE);
 
-            //TODO
             logger.info("New name = ");
             ps.setString(1, scanner.nextLine());
             logger.info("New date (like 2002-07-26) = ");
@@ -145,12 +144,33 @@ public class AircraftDAO implements IAircraftDAO {
             ps.setInt(3, scanner.nextInt());
             logger.info("New strength = ");
             ps.setInt(4, scanner.nextInt());
-            //TODO
             ps.setLong(5, id);
             scanner.close();
             ps.executeUpdate();
 
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public void update(Aircraft object) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(UPDATE);
+
+            ps.setString(1, object.getName());
+            ps.setDate(2, object.getReleaseDate());
+            ps.setInt(3, object.getNumberOfFlights());
+            ps.setInt(4, object.getStrength());
+            ps.setLong(5, object.getId());
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
