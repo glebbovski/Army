@@ -29,6 +29,7 @@ public class HangarDAO implements IHangarDAO {
             "\n" +
             "VALUES (?, ?)";
     private static final String DELETE = "DELETE FROM army.hangars WHERE id=?";
+    private static final String GET_ALL_BY_ARMY_ID = "SELECT * FROM army.hangars WHERE Army_id=?";
 
     public HangarDAO() {
     }
@@ -88,6 +89,35 @@ public class HangarDAO implements IHangarDAO {
         try {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET_ALL);
+            List<Hangar> hangars = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Hangar hangar = new Hangar();
+                hangar.setId(rs.getInt("id"));
+                hangar.setNumberOfMilitaryCraft(rs.getInt("numberOfMilitaryCraft"));
+                hangar.setArmyId(rs.getInt("Army_id"));
+                hangars.add(hangar);
+            }
+            return hangars;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Hangar> getAllHangarsByArmyId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_ARMY_ID);
+            ps.setLong(1, id);
             List<Hangar> hangars = new ArrayList<>();
 
             ResultSet rs = ps.executeQuery();

@@ -32,6 +32,7 @@ public class HelicopterDAO implements IHelicopterDAO {
             "army.helicopters.numberOfFlights, army.helicopters.strength, army.helicopters.Hangars_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.helicopters WHERE id=?";
+    private static final String GET_ALL_BY_HANGARS_ID = "SELECT * FROM army.helicopters WHERE Hangars_id=?";
 
     public HelicopterDAO() {
     }
@@ -98,6 +99,38 @@ public class HelicopterDAO implements IHelicopterDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET_ALL);
             List<Helicopter> helicopters = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Helicopter helicopter = new Helicopter();
+                helicopter.setId(rs.getInt("id"));
+                helicopter.setName(rs.getString("name"));
+                helicopter.setReleaseDate(rs.getDate("releaseDate"));
+                helicopter.setNumberOfFlights(rs.getInt("numberOfFlights"));
+                helicopter.setStrength(rs.getInt("strength"));
+                helicopter.setHangarsId(rs.getInt("Hangars_id"));
+                helicopters.add(helicopter);
+            }
+            return helicopters;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Helicopter> getAllByHangarId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_HANGARS_ID);
+            List<Helicopter> helicopters = new ArrayList<>();
+            ps.setLong(1, id);
 
             ResultSet rs = ps.executeQuery();
 

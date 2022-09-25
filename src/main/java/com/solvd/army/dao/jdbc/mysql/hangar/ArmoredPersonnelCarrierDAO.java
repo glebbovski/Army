@@ -36,6 +36,8 @@ public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
             "army.armoredpersonnelcarriers.Hangars_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.armoredpersonnelcarriers WHERE id=?";
+    private static final String GET_ALL_BY_HANGARS_ID = "SELECT * FROM army.armoredpersonnelcarriers " +
+            "WHERE Hangars_id=?";
 
     public ArmoredPersonnelCarrierDAO() {
     }
@@ -116,6 +118,38 @@ public class ArmoredPersonnelCarrierDAO implements IArmoredPersonnelCarrierDAO {
                 armoredPersonnelCarriersList.add(armoredPersonnelCarriers);
             }
             return armoredPersonnelCarriersList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<ArmoredPersonnelCarrier> getAllByHangarId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_HANGARS_ID);
+            List<ArmoredPersonnelCarrier> personnelCarriers = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ArmoredPersonnelCarrier armoredPersonnelCarriers = new ArmoredPersonnelCarrier();
+                armoredPersonnelCarriers.setId(rs.getInt("id"));
+                armoredPersonnelCarriers.setName(rs.getString("name"));
+                armoredPersonnelCarriers.setReleaseDate(rs.getDate("releaseDate"));
+                armoredPersonnelCarriers.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                armoredPersonnelCarriers.setStrength(rs.getInt("strength"));
+                armoredPersonnelCarriers.setHangarsId(rs.getInt("Hangars_id"));
+                personnelCarriers.add(armoredPersonnelCarriers);
+            }
+            return personnelCarriers;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

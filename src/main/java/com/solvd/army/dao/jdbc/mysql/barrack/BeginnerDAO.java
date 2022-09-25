@@ -31,6 +31,7 @@ public class BeginnerDAO implements IBeginnerDAO {
             "army.beginners.beginDate, army.beginners.endDate, army.beginners.strength, army.beginners.Barracks_id)\n" +
             "VALUES (?, ?, ?, ?, 1, ?)";
     private static final String DELETE = "DELETE FROM army.beginners WHERE id=?";
+    private static final String GET_ALL_BY_BARRACK_ID = "SELECT * FROM army.beginners WHERE Barracks_id=?";
 
     public BeginnerDAO() {
     }
@@ -97,6 +98,38 @@ public class BeginnerDAO implements IBeginnerDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET_ALL);
             List<Beginner> beginners = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Beginner beginner = new Beginner();
+                beginner.setId(rs.getInt("id"));
+                beginner.setName(rs.getString("name"));
+                beginner.setSurname(rs.getString("surname"));
+                beginner.setBeginDate(rs.getDate("beginDate"));
+                beginner.setEndDate(rs.getDate("endDate"));
+                beginner.setBarracksId(rs.getInt("Barracks_id"));
+                beginners.add(beginner);
+            }
+            return beginners;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Beginner> getAllByBarrackId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_BARRACK_ID);
+            List<Beginner> beginners = new ArrayList<>();
+            ps.setLong(1, id);
+
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {

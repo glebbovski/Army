@@ -41,6 +41,7 @@ public class WarshipDAO implements IWarshipDAO {
             "army.warships.Jetties_id)\n" +
             "VALUES (?, ?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.warships WHERE id=?";
+    private static final String GET_ALL_BY_JETTIES_ID = "SELECT * FROM army.warships WHERE Jetties_id=?";
 
     public WarshipDAO() {
     }
@@ -125,6 +126,38 @@ public class WarshipDAO implements IWarshipDAO {
             }
             return warships;
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Warship> getAllByJettieId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_JETTIES_ID);
+            List<Warship> warships = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Warship warship = new Warship();
+                warship.setId(rs.getInt("id"));
+                warship.setName(rs.getString("name"));
+                warship.setReleaseDate(rs.getDate("releaseDate"));
+                warship.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                warship.setNumberOfBombs(rs.getInt("numberOfBombs"));
+                warship.setStrength(rs.getInt("strength"));
+                warship.setJettiesId(rs.getInt("Jetties_id"));
+                warships.add(warship);
+            }
+            return warships;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

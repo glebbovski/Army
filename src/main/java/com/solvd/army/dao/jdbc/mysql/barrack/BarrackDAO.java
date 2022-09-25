@@ -31,6 +31,7 @@ public class BarrackDAO implements IBarrackDAO {
             "\n" +
             "VALUES (?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.barracks WHERE id=?";
+    private static final String GET_ALL_BY_ARMY_ID = "SELECT * FROM army.barracks WHERE Army_id=?";
 
     public BarrackDAO() {
     }
@@ -113,6 +114,36 @@ public class BarrackDAO implements IBarrackDAO {
             ConnectionUtil.close(connection);
         }
 
+    }
+
+    @Override
+    public List<Barrack> getAllBarracksByArmyId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_ARMY_ID);
+            ps.setLong(1, id);
+            List<Barrack> barracks = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Barrack barrack = new Barrack();
+                barrack.setId(rs.getInt("id"));
+                barrack.setNumberOfBeds(rs.getInt("numberOfBeds"));
+                barrack.setNumberOfFloors(rs.getInt("numberOfFloors"));
+                barrack.setArmyId(rs.getInt("Army_id"));
+                barracks.add(barrack);
+            }
+            return barracks;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
     }
 
     @Override

@@ -37,6 +37,7 @@ public class TankDAO implements ITankDAO {
             "army.tanks.Hangars_id)\n" +
             "VALUES (?, ?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.tanks WHERE id=?";
+    private static final String GET_ALL_BY_HANGARS_ID = "SELECT * FROM army.tanks WHERE Hangars_id=?";
 
     public TankDAO() {
     }
@@ -121,6 +122,38 @@ public class TankDAO implements ITankDAO {
             }
             return tanks;
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Tank> getAllByHangarId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_HANGARS_ID);
+            List<Tank> tanks = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Tank tank = new Tank();
+                tank.setId(rs.getInt("id"));
+                tank.setName(rs.getString("name"));
+                tank.setReleaseDate(rs.getDate("releaseDate"));
+                tank.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                tank.setCentimetersOfArmor(rs.getInt("centimetersOfArmor"));
+                tank.setStrength(rs.getInt("strength"));
+                tank.setHangarsId(rs.getInt("Hangars_id"));
+                tanks.add(tank);
+            }
+            return tanks;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

@@ -39,6 +39,7 @@ public class BoatDAO implements IBoatDAO {
             "army.boats.Jetties_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.boats WHERE id=?";
+    private static final String GET_ALL_BY_JETTIES_ID = "SELECT * FROM army.boats WHERE Jetties_id=?";
 
     public BoatDAO() {
     }
@@ -118,6 +119,39 @@ public class BoatDAO implements IBoatDAO {
                 boats.setJettiesId(rs.getInt("Jetties_id"));
                 boatsList.add(boats);
             }
+            return boatsList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Boat> getAllByJettieId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_JETTIES_ID);
+            List<Boat> boatsList = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Boat boats = new Boat();
+                boats.setId(rs.getInt("id"));
+                boats.setName(rs.getString("name"));
+                boats.setReleaseDate(rs.getDate("releaseDate"));
+                boats.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                boats.setStrength(rs.getInt("strength"));
+                boats.setJettiesId(rs.getInt("Jetties_id"));
+                boatsList.add(boats);
+            }
+
             return boatsList;
 
         } catch (SQLException e) {

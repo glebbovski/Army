@@ -3,6 +3,7 @@ package com.solvd.army.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.management.AttributeNotFoundException;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -29,7 +30,11 @@ public class MainService {
             }
         }
         for (int i = 0; i < topBotStr.length() - 2; i++) {
-            strMinus += "-";
+            if (i != topBotStr.length() - 3 && topBotStr.charAt(i + 1) == '|') {
+                strMinus += "+";
+            } else {
+                strMinus += "-";
+            }
         }
         strMinus += "+";
         logger.info(strMinus);
@@ -40,7 +45,7 @@ public class MainService {
 
     }
 
-    public static void mainWork() {
+    public static void mainWork() throws AttributeNotFoundException {
         logger.info("Hello! We are glad to see you in our army-game. We have " + MainArmyService.getCountOfArmies() +
                 " basic armies.");
         logger.info("Do you want to play with basic armies or want to add another one?");
@@ -64,13 +69,61 @@ public class MainService {
         }
 
         if (intChoice == 1) { // basic army
-            String[] tmp = new String[MainArmyService.getCountOfArmies()];
-            for(int i = 0; i < tmp.length; i++) {
-                tmp[i] = MainArmyService.getListOfArmies().get(i);
+            String[] allArmies = new String[MainArmyService.getCountOfArmies()];
+            for(int i = 0; i < allArmies.length; i++) {
+                allArmies[i] = MainArmyService.getListOfArmies().get(i);
             }
-            dashForAnswer(tmp);
+
+            logger.info("Which army do you want to choose?");
+            dashForAnswer(allArmies);
+            choice = scanner.nextLine();
+
+            intChoice = -1; // choice for user army
+            while(intChoice == -1) { // get army by user
+                if (MainArmyService.getListOfArmies().contains((String) choice)) {
+                    intChoice = MainArmyService.getListOfArmies().indexOf(choice);
+                } else {
+                    logger.info("Please, make your choice more correctly.");
+                    choice = scanner.nextLine();
+                }
+            }
+
+            String[] remainingArmies = new String[allArmies.length - 1]; // remaining armies
+            int j = 0;
+            for(int i = 0; i < allArmies.length; i++) {
+                if (i != intChoice) {
+                    remainingArmies[j++] = allArmies[i];
+                }
+            }
+
+            logger.info("Which army do you want to fight?");
+            dashForAnswer(remainingArmies);
+            choice = scanner.nextLine();
+
+            int secondChoice;
+            secondChoice = -1;
+            while(secondChoice == -1) { // get army to fight
+                for(int i = 0; i < remainingArmies.length; i++) {
+                    if (choice.equals(remainingArmies[i])) {
+                        secondChoice = i;
+                        break;
+                    }
+                }
+                if (secondChoice != -1) {
+                    break;
+                } else {
+                    logger.info("Please, make your choice more correctly.");
+                    choice = scanner.nextLine();
+                }
+            }
 
             // TODO: here
+            // allArmies AND remainingArmies
+
+            MainArmyService.AllAboutArmy allAboutArmy = new MainArmyService.AllAboutArmy(allArmies[intChoice]);
+            logger.info(allAboutArmy);
+
+
 
 
         } else { // new army

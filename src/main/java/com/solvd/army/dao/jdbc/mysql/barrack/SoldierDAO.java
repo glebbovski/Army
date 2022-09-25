@@ -27,6 +27,7 @@ public class SoldierDAO implements ISoldierDAO {
             "army.soldiers.rank, army.soldiers.strength, army.soldiers.Barracks_id)\n" +
             "VALUES (?, ?, ?, 2, ?)";
     private static final String DELETE = "DELETE FROM army.soldiers WHERE id=?";
+    private static final String GET_ALL_BY_BARRACK_ID = "SELECT * FROM army.soldiers WHERE Barracks_id=?";
 
 
     public SoldierDAO() {
@@ -105,6 +106,37 @@ public class SoldierDAO implements ISoldierDAO {
                 soldiers.add(soldier);
             }
             return soldiers;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Soldier> getAllByBarrackId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_BARRACK_ID);
+            List<Soldier> soldiers = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Soldier soldier = new Soldier();
+                soldier.setId(rs.getInt("id"));
+                soldier.setName(rs.getString("name"));
+                soldier.setSurname(rs.getString("surname"));
+                soldier.setRank(rs.getString("rank"));
+                soldier.setBarracksId(rs.getInt("Barracks_id"));
+                soldiers.add(soldier);
+            }
+                return soldiers;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

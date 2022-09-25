@@ -36,6 +36,8 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
             "army.infantryfightingvehicles.Hangars_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.infantryfightingvehicles WHERE id=?";
+    private static final String GET_ALL_BY_HANGARS_ID = "SELECT * FROM army.infantryfightingvehicles " +
+            "WHERE Hangars_id=?";
 
     public InfantryFightingVehicleDAO() {
     }
@@ -116,6 +118,38 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
                 infantryFightingVehicleList.add(infantryFightingVehicles);
             }
             return infantryFightingVehicleList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<InfantryFightingVehicle> getAllByHangarId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_HANGARS_ID);
+            List<InfantryFightingVehicle> vehicles = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                InfantryFightingVehicle infantryFightingVehicles = new InfantryFightingVehicle();
+                infantryFightingVehicles.setId(rs.getInt("id"));
+                infantryFightingVehicles.setName(rs.getString("name"));
+                infantryFightingVehicles.setReleaseDate(rs.getDate("releaseDate"));
+                infantryFightingVehicles.setNumberOfGuns(rs.getInt("numberOfGuns"));
+                infantryFightingVehicles.setStrength(rs.getInt("strength"));
+                infantryFightingVehicles.setHangarsId(rs.getInt("Hangars_id"));
+                vehicles.add(infantryFightingVehicles);
+            }
+            return vehicles;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

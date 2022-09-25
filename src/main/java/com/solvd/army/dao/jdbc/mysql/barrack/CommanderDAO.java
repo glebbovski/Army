@@ -29,6 +29,7 @@ public class CommanderDAO implements ICommanderDAO {
             "army.commanders.rank, army.commanders.strength, army.commanders.Barracks_id)\n" +
             "VALUES (?, ?, ?, 3, ?)";
     private static final String DELETE = "DELETE FROM army.commanders WHERE id=?";
+    private static final String GET_ALL_BY_BARRACK_ID = "SELECT * FROM army.commanders WHERE Barracks_id=?";
 
     public CommanderDAO() {
     }
@@ -93,6 +94,37 @@ public class CommanderDAO implements ICommanderDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET_ALL);
             List<Commander> commanders = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Commander commander = new Commander();
+                commander.setId(rs.getInt("id"));
+                commander.setName(rs.getString("name"));
+                commander.setSurname(rs.getString("surname"));
+                commander.setRank(rs.getString("rank"));
+                commander.setBarracksId(rs.getInt("Barracks_id"));
+                commanders.add(commander);
+            }
+            return commanders;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Commander> getAllByBarrackId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_BARRACK_ID);
+            List<Commander> commanders = new ArrayList<>();
+            ps.setLong(1, id);
+
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {

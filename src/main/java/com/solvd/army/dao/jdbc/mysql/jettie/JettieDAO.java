@@ -30,6 +30,7 @@ public class JettieDAO implements IJettieDAO {
             "\n" +
             "VALUES (?, ?)";
     private static final String DELETE = "DELETE FROM army.jetties WHERE id=?";
+    private static final String GET_ALL_BY_ARMY_ID = "SELECT * FROM army.jetties WHERE Army_id=?";
 
     public JettieDAO() {
     }
@@ -101,6 +102,34 @@ public class JettieDAO implements IJettieDAO {
             }
             return jetties;
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Jettie> getAllJettiesByArmyId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_ARMY_ID);
+            List<Jettie> jetties = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Jettie jettie = new Jettie();
+                jettie.setId(rs.getInt("id"));
+                jettie.setNumberOfShips(rs.getInt("numberOfShips"));
+                jettie.setArmyId(rs.getInt("Army_id"));
+                jetties.add(jettie);
+            }
+            return jetties;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

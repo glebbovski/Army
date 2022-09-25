@@ -32,6 +32,7 @@ public class UAVDAO implements IUAVDAO {
             "army.uavs.numberOfBombs, army.uavs.strength, army.uavs.Hangars_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.uavs WHERE id=?";
+    private static final String GET_ALL_BY_HANGARS_ID = "SELECT * FROM army.uavs WHERE Hangars_id=?";
 
     public UAVDAO() {
     }
@@ -112,6 +113,38 @@ public class UAVDAO implements IUAVDAO {
             }
             
             return uavList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<UAV> getAllByHangarId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_HANGARS_ID);
+            List<UAV> uavsList = new ArrayList<>();
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                UAV uavs = new UAV();
+                uavs.setId(rs.getInt("id"));
+                uavs.setName(rs.getString("name"));
+                uavs.setReleaseDate(rs.getDate("releaseDate"));
+                uavs.setNumberOfBombs(rs.getInt("numberOfBombs"));
+                uavs.setStrength(rs.getInt("strength"));
+                uavs.setHangarsId(rs.getInt("Hangars_id"));
+                uavsList.add(uavs);
+            }
+            return uavsList;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

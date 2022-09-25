@@ -31,6 +31,7 @@ public class AircraftDAO implements IAircraftDAO {
             "army.aircrafts.numberOfFlights, army.aircrafts.strength, army.aircrafts.Hangars_id)\n" +
             "VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM army.aircrafts WHERE id=?";
+    private static final String GET_ALL_BY_HANGARS_ID = "SELECT * FROM army.aircrafts WHERE Hangars_id=?";
 
     public AircraftDAO() {
     }
@@ -98,6 +99,38 @@ public class AircraftDAO implements IAircraftDAO {
             connection = ConnectionUtil.getConnection();
             ps = connection.prepareStatement(GET_ALL);
             List<Aircraft> aircrafts = new ArrayList<>();
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Aircraft aircraft = new Aircraft();
+                aircraft.setId(rs.getInt("id"));
+                aircraft.setName(rs.getString("name"));
+                aircraft.setReleaseDate(rs.getDate("releaseDate"));
+                aircraft.setNumberOfFlights(rs.getInt("numberOfFlights"));
+                aircraft.setStrength(rs.getInt("strength"));
+                aircraft.setHangarsId(rs.getInt("Hangars_id"));
+                aircrafts.add(aircraft);
+            }
+            return aircrafts;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Aircraft> getAllByHangarId(long id) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(GET_ALL_BY_HANGARS_ID);
+            List<Aircraft> aircrafts = new ArrayList<>();
+            ps.setLong(1, id);
 
             ResultSet rs = ps.executeQuery();
 

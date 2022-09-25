@@ -7,4 +7,5 @@ import java.util.List;
 public interface IMainArmyDAO extends IBaseDAO<MainArmy>{
     int getRowsCount();
     List<String> getArmiesNames();
+    long getIdByName(String name);
 }

@@ -34,6 +34,7 @@ public class MainArmyDAO implements IMainArmyDAO {
     private static final String DELETE = "DELETE FROM army.mainArmy WHERE id=?";
     private static final String COUNT = "SELECT COUNT(*) FROM army.mainarmy";
     private static final String NAMES = "SELECT name FROM army.mainarmy";
+    private static final String ID_BY_NAME = "SELECT id FROM army.mainarmy WHERE name=\"%s\"";
 
     public MainArmyDAO() {
     }
@@ -203,6 +204,28 @@ public class MainArmyDAO implements IMainArmyDAO {
             ConnectionUtil.close(ps);
             ConnectionUtil.close(connection);
         }
+    }
+
+    @Override
+    public long getIdByName(String name) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            ps = connection.prepareStatement(String.format(ID_BY_NAME, name));
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(ps);
+            ConnectionUtil.close(connection);
+        }
+        return 0;
     }
 
     @Override
