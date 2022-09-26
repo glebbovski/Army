@@ -66,11 +66,11 @@ public class Beginner extends Person {
 
     @Override
     public String toString() {
-        return "Beginner{" +
+        return super.toString() + "Beginner{" +
                 "beginDate=" + beginDate +
                 ", endDate=" + endDate +
                 ", strength=" + strength +
                 ", barracksId=" + barracksId +
-                '}';
+                "}}";
     }
 }
