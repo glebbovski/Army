@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Beginner extends Person {
     private java.sql.Date beginDate;
     private java.sql.Date endDate;
+    private final int strength = 1;
     private long barracksId;
 
     public Beginner() {
@@ -45,27 +46,31 @@ public class Beginner extends Person {
         this.barracksId = barracksId;
     }
 
+    public int getStrength() {
+        return strength;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Beginner beginner = (Beginner) o;
-        return barracksId == beginner.barracksId && Objects.equals(beginDate, beginner.beginDate)
-                && Objects.equals(endDate, beginner.endDate);
+        return barracksId == beginner.barracksId && Objects.equals(beginDate, beginner.beginDate) && Objects.equals(endDate, beginner.endDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), beginDate, endDate, barracksId);
+        return Objects.hash(super.hashCode(), beginDate, endDate, strength, barracksId);
     }
 
     @Override
     public String toString() {
-        return super.toString() + "Beginner{" +
+        return "Beginner{" +
                 "beginDate=" + beginDate +
                 ", endDate=" + endDate +
+                ", strength=" + strength +
                 ", barracksId=" + barracksId +
-                "}}";
+                '}';
     }
 }
