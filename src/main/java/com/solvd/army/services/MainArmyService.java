@@ -27,23 +27,24 @@ import java.util.List;
 
 public class MainArmyService {
 
+    private static MainArmyDAO mainArmyDAO = new MainArmyDAO();
+    private static BarrackDAO barrackDAO = new BarrackDAO();
+    private static HangarDAO hangarDAO = new HangarDAO();
+    private static JettieDAO jettieDAO = new JettieDAO();
+    private static SoldierDAO soldierDAO = new SoldierDAO();
+    private static BeginnerDAO beginnerDAO = new BeginnerDAO();
+    private static CommanderDAO commanderDAO = new CommanderDAO();
+    private static AircraftDAO aircraftDAO = new AircraftDAO();
+    private static HelicopterDAO helicopterDAO = new HelicopterDAO();
+    private static ArmoredPersonnelCarrierDAO carrierDAO = new ArmoredPersonnelCarrierDAO();
+    private static TankDAO tankDAO = new TankDAO();
+    private static UAVDAO uavdao = new UAVDAO();
+    private static InfantryFightingVehicleDAO vehicleDAO = new InfantryFightingVehicleDAO();
+    private static WarshipDAO warshipDAO = new WarshipDAO();
+    private static SubmarineDAO submarineDAO = new SubmarineDAO();
+    private static BoatDAO boatDAO = new BoatDAO();
+
     public static class AllAboutArmy {
-        private MainArmyDAO mainArmyDAO = new MainArmyDAO();
-        private BarrackDAO barrackDAO = new BarrackDAO();
-        private HangarDAO hangarDAO = new HangarDAO();
-        private JettieDAO jettieDAO = new JettieDAO();
-        private SoldierDAO soldierDAO = new SoldierDAO();
-        private BeginnerDAO beginnerDAO = new BeginnerDAO();
-        private CommanderDAO commanderDAO = new CommanderDAO();
-        private AircraftDAO aircraftDAO = new AircraftDAO();
-        private HelicopterDAO helicopterDAO = new HelicopterDAO();
-        private ArmoredPersonnelCarrierDAO carrierDAO = new ArmoredPersonnelCarrierDAO();
-        private TankDAO tankDAO = new TankDAO();
-        private UAVDAO uavdao = new UAVDAO();
-        private InfantryFightingVehicleDAO vehicleDAO = new InfantryFightingVehicleDAO();
-        private WarshipDAO warshipDAO = new WarshipDAO();
-        private SubmarineDAO submarineDAO = new SubmarineDAO();
-        private BoatDAO boatDAO = new BoatDAO();
 
         private long id;
         private MainArmy mainArmy;
@@ -62,6 +63,10 @@ public class MainArmyService {
         private List<Warship> warships = new ArrayList<>();
         private List<Submarine> submarines = new ArrayList<>();
         private List<Boat> boats = new ArrayList<>();
+
+        private long barrackStrength = 0;
+        private long hangarStrength = 0;
+        private long jettieStrength = 0;
 
         public AllAboutArmy(String name) throws AttributeNotFoundException {
             id = mainArmyDAO.getIdByName(name);
@@ -88,7 +93,6 @@ public class MainArmyService {
                     beginners.addAll(lstBeginner);
                 }
             }
-
             for(Hangar hangar : hangars) {
                 List<Aircraft> tmpAircraft = aircraftDAO.getAllByHangarId(hangar.getId());
                 if (tmpAircraft != null) {
@@ -115,7 +119,6 @@ public class MainArmyService {
                     infantryFightingVehicleList.addAll(tmpVehicles);
                 }
             }
-
             for(Jettie jettie : jetties) {
                 List<Warship> tmpWarship = warshipDAO.getAllByJettieId(jettie.getId());
                 if (tmpWarship != null) {
@@ -129,6 +132,48 @@ public class MainArmyService {
                 if (tmpBoat != null) {
                     boats.addAll(tmpBoat);
                 }
+            }
+
+
+            for(Soldier soldier : soldiers) {
+                barrackStrength += soldier.getStrength();
+            }
+            for(Commander commander : commanders) {
+                barrackStrength += commander.getStrength();
+            }
+            for(Beginner beginner : beginners) {
+                barrackStrength += beginner.getStrength();
+            }
+
+
+            for(Aircraft aircraft : aircrafts) {
+                hangarStrength += aircraft.getStrength();
+            }
+            for(Helicopter helicopter : helicopters) {
+                hangarStrength += helicopter.getStrength();
+            }
+            for(ArmoredPersonnelCarrier carrier : armoredPersonnelCarriers) {
+                hangarStrength += carrier.getStrength();
+            }
+            for(Tank tank : tanks) {
+                hangarStrength += tank.getStrength();
+            }
+            for(UAV uav : uavs) {
+                hangarStrength += uav.getStrength();
+            }
+            for(InfantryFightingVehicle vehicle : infantryFightingVehicleList) {
+                hangarStrength += vehicle.getStrength();
+            }
+
+
+            for(Warship warship : warships) {
+                jettieStrength += warship.getStrength();
+            }
+            for(Submarine submarine : submarines) {
+                jettieStrength += submarine.getStrength();
+            }
+            for(Boat boat : boats) {
+                jettieStrength += boat.getStrength();
             }
 
         }
@@ -197,6 +242,18 @@ public class MainArmyService {
             return boats;
         }
 
+        public long getBarrackStrength() {
+            return barrackStrength;
+        }
+
+        public long getHangarStrength() {
+            return hangarStrength;
+        }
+
+        public long getJettieStrength() {
+            return jettieStrength;
+        }
+
         @Override
         public String toString() {
             return "AllAboutArmy{" +
@@ -216,11 +273,13 @@ public class MainArmyService {
                     ", \nwarships=" + warships +
                     ", \nsubmarines=" + submarines +
                     ", \nboats=" + boats +
+                    ", \nbarrackStrength=" + barrackStrength +
+                    ", \nhangarStrength=" + hangarStrength +
+                    ", \njettieStrength=" + jettieStrength +
                     '}';
         }
     }
 
-    private static MainArmyDAO mainArmyDAO = new MainArmyDAO();
 
     public static int getCountOfArmies() {
         return mainArmyDAO.getRowsCount();

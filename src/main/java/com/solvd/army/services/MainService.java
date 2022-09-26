@@ -120,8 +120,32 @@ public class MainService {
             // TODO: here
             // allArmies AND remainingArmies
 
-            MainArmyService.AllAboutArmy allAboutArmy = new MainArmyService.AllAboutArmy(allArmies[intChoice]);
-            logger.info(allAboutArmy);
+            MainArmyService.AllAboutArmy allAboutMainArmy = new MainArmyService.AllAboutArmy(allArmies[intChoice]);
+            logger.info("Trying to get information about your choice...");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("Got it!");
+            logger.info(allAboutMainArmy);
+            try {
+                Thread.sleep(7000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("-------------------------------------------------");
+            logger.info("Trying to get information about second army...");
+            MainArmyService.AllAboutArmy allAboutSecondArmy =
+                    new MainArmyService.AllAboutArmy(remainingArmies[secondChoice]);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("Got it!");
+            logger.info(allAboutSecondArmy);
+            logger.info("-------------------------------------------------");
 
 
 
