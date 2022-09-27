@@ -1,5 +1,5 @@
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.solvd.army.dao.ISubmarineDAO">
+<mapper namespace="src.main.resources.mappers.SubmarineMapper">
     <resultMap id="submarine" type="com.solvd.army.models.jettie.Submarine">
         <id property="id" column="id"/>
         <result property="name" column="name"/>

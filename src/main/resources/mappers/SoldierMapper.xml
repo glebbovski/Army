@@ -1,5 +1,5 @@
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.solvd.army.dao.ISoldierDAO">
+<mapper namespace="src.main.resources.mappers.SoldierMapper">
     <resultMap id="soldier" type="com.solvd.army.models.barrack.Soldier">
         <id property="id" column="id"/>
         <result property="name" column="name"/>

@@ -1,5 +1,5 @@
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.solvd.army.dao.IAircraftDAO">
+<mapper namespace="src.main.resources.mappers.AircraftMapper">
     <resultMap id="aircraft" type="com.solvd.army.models.hangar.Aircraft">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
