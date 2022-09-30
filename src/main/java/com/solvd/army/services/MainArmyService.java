@@ -20,12 +20,16 @@ import com.solvd.army.models.jettie.Boat;
 import com.solvd.army.models.jettie.Jettie;
 import com.solvd.army.models.jettie.Submarine;
 import com.solvd.army.models.jettie.Warship;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.management.AttributeNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainArmyService {
+
+    private static final Logger logger = LogManager.getLogger(MainArmyService.class);
 
     private static MainArmyDAO mainArmyDAO = new MainArmyDAO();
     private static BarrackDAO barrackDAO = new BarrackDAO();
@@ -254,6 +258,18 @@ public class MainArmyService {
             return jettieStrength;
         }
 
+        public void setBarrackStrength(long barrackStrength) {
+            this.barrackStrength = barrackStrength;
+        }
+
+        public void setHangarStrength(long hangarStrength) {
+            this.hangarStrength = hangarStrength;
+        }
+
+        public void setJettieStrength(long jettieStrength) {
+            this.jettieStrength = jettieStrength;
+        }
+
         @Override
         public String toString() {
             return "AllAboutArmy{" +
@@ -291,5 +307,64 @@ public class MainArmyService {
 
     public static List<String> getListOfArmies() { // names of armies
         return mainArmyDAO.getArmiesNames();
+    }
+
+    public static int whoStronger(int barrackWinner, int hangarWinner, int jettieWinner) {
+        if (barrackWinner == 1 && hangarWinner == 1 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 1 && hangarWinner == 1 && jettieWinner == 2) {
+            return 1;
+        } else if (barrackWinner == 1 && hangarWinner == 1 && jettieWinner == 3) {
+            return 1;
+        } else if (barrackWinner == 1 && hangarWinner == 2 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 1 && hangarWinner == 2 && jettieWinner == 2) {
+            return 2;
+        } else if (barrackWinner == 1 && hangarWinner == 2 && jettieWinner == 3) {
+            return 2;
+        } else if (barrackWinner == 1 && hangarWinner == 3 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 1 && hangarWinner == 3 && jettieWinner == 2) {
+            return 2;
+        } else if (barrackWinner == 1 && hangarWinner == 3 && jettieWinner == 3) {
+            return 1;
+        } else if (barrackWinner == 2 && hangarWinner == 1 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 2 && hangarWinner == 1 && jettieWinner == 2) {
+            return 2;
+        } else if (barrackWinner == 2 && hangarWinner == 1 && jettieWinner == 3) {
+            return 1;
+        } else if (barrackWinner == 2 && hangarWinner == 2 && jettieWinner == 1) {
+            return 2;
+        } else if (barrackWinner == 2 && hangarWinner == 2 && jettieWinner == 2) {
+            return 2;
+        } else if (barrackWinner == 2 && hangarWinner == 2 && jettieWinner == 3) {
+            return 2;
+        } else if (barrackWinner == 2 && hangarWinner == 3 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 2 && hangarWinner == 3 && jettieWinner == 2) {
+            return 2;
+        } else if (barrackWinner == 2 && hangarWinner == 3 && jettieWinner == 3) {
+            return 2;
+        } else if (barrackWinner == 3 && hangarWinner == 1 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 3 && hangarWinner == 1 && jettieWinner == 2) {
+            return 2;
+        } else if (barrackWinner == 3 && hangarWinner == 1 && jettieWinner == 3) {
+            return 1;
+        } else if (barrackWinner == 3 && hangarWinner == 2 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 3 && hangarWinner == 2 && jettieWinner == 2) {
+            return 2;
+        } else if (barrackWinner == 3 && hangarWinner == 2 && jettieWinner == 3) {
+            return 2;
+        } else if (barrackWinner == 3 && hangarWinner == 3 && jettieWinner == 1) {
+            return 1;
+        } else if (barrackWinner == 3 && hangarWinner == 3 && jettieWinner == 2) {
+            return 2;
+        } else {
+            return 3;
+        }
+
     }
 }

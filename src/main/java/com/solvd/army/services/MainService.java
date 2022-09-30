@@ -146,9 +146,138 @@ public class MainService {
             logger.info("Got it!");
             logger.info(allAboutSecondArmy);
             logger.info("-------------------------------------------------");
+            logger.info("Are you ready to fight??????");
+            dashForAnswer("YES");
+            intChoice = 0;
+            choice = scanner.nextLine();
+            while(intChoice == 0) {
+                switch (choice) {
+                    case "YES":
+                        intChoice = 1;
+                        break;
+                    default:
+                        logger.info("Please, make your choice more correctly.");
+                        choice = scanner.nextLine();
+                }
+            }
+
+            dashForAnswer("IT IS TIME TO FIGHT");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("Very fierce battles begin on land...");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("The fights are still going on...");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("Air forces and heavy equipment enter the battle...");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("Naval battles also begin...");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("The fight is almost over...");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("We have results...");
 
 
+            int barrackWinner = -1; // 3 - tie, 1 - main army won, 2 - second army won
+            int hangarWinner = -1;  // 3 - tie, 1 - main army won, 2 - second army won
+            int jettieWinner = -1;  // 3 - tie, 1 - main army won, 2 - second army won
+            // barrack strength
+            if (allAboutMainArmy.getBarrackStrength() > allAboutSecondArmy.getBarrackStrength()) {
+                allAboutMainArmy.setBarrackStrength(allAboutMainArmy.getBarrackStrength() -
+                        allAboutSecondArmy.getBarrackStrength());
+                allAboutSecondArmy.setBarrackStrength(0);
 
+                barrackWinner = 1;
+
+            } else if (allAboutMainArmy.getBarrackStrength() < allAboutSecondArmy.getBarrackStrength()) {
+                allAboutSecondArmy.setBarrackStrength(allAboutSecondArmy.getBarrackStrength() -
+                        allAboutMainArmy.getBarrackStrength());
+                allAboutMainArmy.setBarrackStrength(0);
+
+                barrackWinner = 2;
+            } else {
+                allAboutMainArmy.setBarrackStrength(0);
+                allAboutSecondArmy.setBarrackStrength(0);
+
+                barrackWinner = 3;
+            }
+
+            // hangar strength
+
+            if (allAboutMainArmy.getHangarStrength() > allAboutSecondArmy.getHangarStrength()) {
+                allAboutMainArmy.setHangarStrength(allAboutMainArmy.getHangarStrength() -
+                        allAboutSecondArmy.getHangarStrength());
+                allAboutSecondArmy.setHangarStrength(0);
+
+                hangarWinner = 1;
+            } else if (allAboutMainArmy.getHangarStrength() < allAboutSecondArmy.getHangarStrength()) {
+                allAboutSecondArmy.setHangarStrength(allAboutSecondArmy.getHangarStrength() -
+                        allAboutMainArmy.getHangarStrength());
+                allAboutMainArmy.setHangarStrength(0);
+
+                hangarWinner = 2;
+            } else {
+                allAboutMainArmy.setHangarStrength(0);
+                allAboutSecondArmy.setHangarStrength(0);
+
+                hangarWinner = 3;
+            }
+
+            // jettie strength
+
+            if (allAboutMainArmy.getJettieStrength() > allAboutSecondArmy.getJettieStrength()) {
+                allAboutMainArmy.setJettieStrength(allAboutMainArmy.getJettieStrength() -
+                        allAboutSecondArmy.getJettieStrength());
+                allAboutSecondArmy.setJettieStrength(0);
+
+                jettieWinner = 1;
+            } else if (allAboutMainArmy.getJettieStrength() < allAboutSecondArmy.getJettieStrength()) {
+                allAboutSecondArmy.setJettieStrength(allAboutSecondArmy.getJettieStrength() -
+                        allAboutMainArmy.getJettieStrength());
+                allAboutMainArmy.setJettieStrength(0);
+
+                jettieWinner = 2;
+            } else {
+                allAboutMainArmy.setJettieStrength(0);
+                allAboutSecondArmy.setJettieStrength(0);
+
+                jettieWinner = 3;
+            }
+            dashForAnswer("                ",
+                    allAboutMainArmy.getMainArmy().getName(), allAboutSecondArmy.getMainArmy().getName());
+            dashForAnswer("barrack strength", allAboutMainArmy.getBarrackStrength() + "",
+                    allAboutSecondArmy.getBarrackStrength() + "");
+            dashForAnswer("hangar strength ", allAboutMainArmy.getHangarStrength() + "",
+                    allAboutSecondArmy.getHangarStrength() + "");
+            dashForAnswer("jettie strength ", allAboutMainArmy.getJettieStrength() + "",
+                    allAboutSecondArmy.getJettieStrength() + "");
+
+            int winner = MainArmyService.whoStronger(barrackWinner, hangarWinner, jettieWinner);
+
+            logger.info(winner == 1 ? "Winner is " + allAboutMainArmy.getMainArmy().getName() : winner == 2 ?
+                    "Winner is " + allAboutSecondArmy.getMainArmy().getName() : "We have a draw!");
 
         } else { // new army
 
