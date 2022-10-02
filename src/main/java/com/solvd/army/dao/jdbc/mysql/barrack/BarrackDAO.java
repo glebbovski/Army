@@ -47,7 +47,7 @@ public class BarrackDAO implements IBarrackDAO {
             ps.setInt(2, object.getNumberOfFloors());
             ps.setLong(3, object.getArmyId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

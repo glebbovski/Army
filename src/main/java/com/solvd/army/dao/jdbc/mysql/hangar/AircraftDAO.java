@@ -50,7 +50,7 @@ public class AircraftDAO implements IAircraftDAO {
             ps.setLong(5, object.getHangarsId());
             // TODO
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

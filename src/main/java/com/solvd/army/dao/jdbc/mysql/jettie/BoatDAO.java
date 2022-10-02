@@ -57,7 +57,7 @@ public class BoatDAO implements IBoatDAO {
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getJettiesId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

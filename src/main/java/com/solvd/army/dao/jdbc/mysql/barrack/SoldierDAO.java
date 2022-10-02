@@ -45,7 +45,7 @@ public class SoldierDAO implements ISoldierDAO {
             ps.setString(3, soldier.getRank());
             ps.setLong(4, soldier.getBarracksId());
             ps.executeUpdate();
-            soldier.setId(getObjectId(soldier));
+            //soldier.setId(getObjectId(soldier));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

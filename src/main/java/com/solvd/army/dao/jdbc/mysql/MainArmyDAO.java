@@ -49,7 +49,7 @@ public class MainArmyDAO implements IMainArmyDAO {
             ps.setString(1, object.getName());
             ps.setInt(2, object.getRating());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            // object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

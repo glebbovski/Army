@@ -49,7 +49,7 @@ public class BeginnerDAO implements IBeginnerDAO {
             ps.setDate(4, object.getEndDate());
             ps.setLong(5, object.getBarracksId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

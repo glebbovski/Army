@@ -56,7 +56,7 @@ public class TankDAO implements ITankDAO {
             ps.setInt(5, object.getStrength());
             ps.setLong(6, object.getHangarsId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

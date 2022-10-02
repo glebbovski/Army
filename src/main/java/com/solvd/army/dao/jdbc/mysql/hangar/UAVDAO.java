@@ -50,7 +50,7 @@ public class UAVDAO implements IUAVDAO {
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getHangarsId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

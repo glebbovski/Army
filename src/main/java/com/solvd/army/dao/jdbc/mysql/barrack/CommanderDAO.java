@@ -46,7 +46,7 @@ public class CommanderDAO implements ICommanderDAO {
             ps.setString(3, commander.getRank());
             ps.setLong(4, commander.getBarracksId());
             ps.executeUpdate();
-            commander.setId(getObjectId(commander));
+            //commander.setId(getObjectId(commander));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

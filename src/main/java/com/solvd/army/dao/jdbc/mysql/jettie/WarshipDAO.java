@@ -60,7 +60,7 @@ public class WarshipDAO implements IWarshipDAO {
             ps.setInt(5, object.getStrength());
             ps.setLong(6, object.getJettiesId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

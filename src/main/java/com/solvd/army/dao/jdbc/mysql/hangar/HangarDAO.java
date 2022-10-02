@@ -44,7 +44,7 @@ public class HangarDAO implements IHangarDAO {
             ps.setInt(1, object.getNumberOfMilitaryCraft());
             ps.setLong(2, object.getArmyId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -45,7 +45,7 @@ public class JettieDAO implements IJettieDAO {
             ps.setInt(1, object.getNumberOfShips());
             ps.setLong(2, object.getArmyId());
             ps.executeUpdate();
-            object.setId(getObjectId(object));
+            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
