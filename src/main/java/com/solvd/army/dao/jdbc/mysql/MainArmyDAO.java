@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql;
 
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IMainArmyDAO;
 import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.MainArmy;
@@ -49,7 +48,6 @@ public class MainArmyDAO implements IMainArmyDAO {
             ps.setString(1, object.getName());
             ps.setInt(2, object.getRating());
             ps.executeUpdate();
-            // object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

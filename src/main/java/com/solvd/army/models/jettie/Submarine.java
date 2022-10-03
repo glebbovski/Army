@@ -2,7 +2,6 @@ package com.solvd.army.models.jettie;
 
 import com.solvd.army.models.abstractClasses.Ship;
 
-import java.sql.Date;
 import java.util.Objects;
 
 public class Submarine extends Ship {

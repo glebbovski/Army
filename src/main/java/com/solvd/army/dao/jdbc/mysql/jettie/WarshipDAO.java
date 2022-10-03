@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.jettie;
 
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IWarshipDAO;
 import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.jettie.Warship;
@@ -60,7 +59,6 @@ public class WarshipDAO implements IWarshipDAO {
             ps.setInt(5, object.getStrength());
             ps.setLong(6, object.getJettiesId());
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

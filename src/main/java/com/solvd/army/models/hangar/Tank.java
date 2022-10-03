@@ -2,7 +2,6 @@ package com.solvd.army.models.hangar;
 
 import com.solvd.army.models.abstractClasses.HangarMilitary;
 
-import java.sql.Date;
 import java.util.Objects;
 
 public class Tank extends HangarMilitary {

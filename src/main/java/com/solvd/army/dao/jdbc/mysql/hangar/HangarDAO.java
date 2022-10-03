@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IHangarDAO;
 import com.solvd.army.models.hangar.Hangar;
 import org.apache.logging.log4j.LogManager;
@@ -44,7 +43,6 @@ public class HangarDAO implements IHangarDAO {
             ps.setInt(1, object.getNumberOfMilitaryCraft());
             ps.setLong(2, object.getArmyId());
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

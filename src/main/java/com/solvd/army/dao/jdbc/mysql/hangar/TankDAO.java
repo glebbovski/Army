@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.ITankDAO;
 import com.solvd.army.models.hangar.Tank;
 import org.apache.logging.log4j.LogManager;
@@ -56,7 +55,6 @@ public class TankDAO implements ITankDAO {
             ps.setInt(5, object.getStrength());
             ps.setLong(6, object.getHangarsId());
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

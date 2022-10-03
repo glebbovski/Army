@@ -1,6 +1,5 @@
 package com.solvd.army.models.abstractClasses;
 
-import java.sql.Date;
 import java.util.Objects;
 
 public abstract class HangarMilitary {

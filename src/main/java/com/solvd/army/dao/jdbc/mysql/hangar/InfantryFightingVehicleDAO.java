@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IInfantryFightingVehicleDAO;
 import com.solvd.army.models.hangar.InfantryFightingVehicle;
 import org.apache.logging.log4j.LogManager;
@@ -55,7 +54,6 @@ public class InfantryFightingVehicleDAO implements IInfantryFightingVehicleDAO {
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getHangarsId());
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
 
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.ISoldierDAO;
 import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.barrack.Soldier;
@@ -45,7 +44,6 @@ public class SoldierDAO implements ISoldierDAO {
             ps.setString(3, soldier.getRank());
             ps.setLong(4, soldier.getBarracksId());
             ps.executeUpdate();
-            //soldier.setId(getObjectId(soldier));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

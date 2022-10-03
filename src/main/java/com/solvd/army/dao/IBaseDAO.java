@@ -1,12 +1,6 @@
 package com.solvd.army.dao;
 
-import com.solvd.army.models.hangar.Aircraft;
-
 import javax.management.AttributeNotFoundException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public interface IBaseDAO<T> {

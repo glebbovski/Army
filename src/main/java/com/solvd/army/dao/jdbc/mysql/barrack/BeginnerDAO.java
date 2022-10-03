@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.barrack;
-// git check
+
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IBeginnerDAO;
 import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.barrack.Beginner;
@@ -49,7 +48,6 @@ public class BeginnerDAO implements IBeginnerDAO {
             ps.setDate(4, object.getEndDate());
             ps.setLong(5, object.getBarracksId());
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -2,7 +2,6 @@ package com.solvd.army.dao.jdbc.mysql.barrack;
 
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IBarrackDAO;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.barrack.Barrack;
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +46,6 @@ public class BarrackDAO implements IBarrackDAO {
             ps.setInt(2, object.getNumberOfFloors());
             ps.setLong(3, object.getArmyId());
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

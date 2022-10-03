@@ -1,9 +1,7 @@
 package com.solvd.army.dao.jdbc.mysql.hangar;
 
-import com.solvd.army.Executor;
 import com.solvd.army.connection.ConnectionUtil;
 import com.solvd.army.dao.IAircraftDAO;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.models.hangar.Aircraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +15,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AircraftDAO implements IAircraftDAO {
-    //TODO
     private static final Logger logger = LogManager.getLogger(AircraftDAO.class);
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -48,9 +45,7 @@ public class AircraftDAO implements IAircraftDAO {
             ps.setInt(3, object.getNumberOfFlights());
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getHangarsId());
-            // TODO
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -247,7 +242,7 @@ public class AircraftDAO implements IAircraftDAO {
                 aircraft.setStrength(rs.getInt("strength"));
                 aircraft.setHangarsId(rs.getInt("Hangars_id"));
                 if(object.equals(aircraft)) {
-                    return aircraft.getId(); // TODO equals
+                    return aircraft.getId();
                 }
             }
             throw new AttributeNotFoundException();

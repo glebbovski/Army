@@ -1,7 +1,6 @@
 package com.solvd.army.dao.jdbc.mysql.jettie;
 
 import com.solvd.army.connection.ConnectionUtil;
-import com.solvd.army.dao.IBaseDAO;
 import com.solvd.army.dao.IBoatDAO;
 import com.solvd.army.dao.jdbc.mysql.hangar.AircraftDAO;
 import com.solvd.army.models.jettie.Boat;
@@ -57,7 +56,6 @@ public class BoatDAO implements IBoatDAO {
             ps.setInt(4, object.getStrength());
             ps.setLong(5, object.getJettiesId());
             ps.executeUpdate();
-            //object.setId(getObjectId(object));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -2,7 +2,6 @@ package com.solvd.army.models.barrack;
 
 import com.solvd.army.models.abstractClasses.Person;
 
-import java.sql.Date;
 import java.util.Objects;
 
 public class Beginner extends Person {
