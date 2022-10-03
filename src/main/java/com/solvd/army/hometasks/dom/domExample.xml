@@ -1,0 +1,17 @@
+<cars>
+    <car id="1">
+        <name>Pagani</name>
+        <author>Horacio Pagani</author>
+        <location>Italy</location>
+    </car>
+    <car id="2">
+        <name>Mercedes</name>
+        <author>Karl Benz</author>
+        <location>Germany</location>
+    </car>
+    <car id="3">
+        <name>Nissan</name>
+        <author>Carlos Ghosn</author>
+        <location>Japan</location>
+    </car>
+</cars>
